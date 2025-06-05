@@ -1,0 +1,143 @@
+Date : 2025-05-31 19:38:45
+Directory : c:\Users\Melany.MELANY\Desktop\proyecto\Proyecto 2025\DESARROLLO\zooland
+Total : 70 files,  3387 codes, 274 comments, 365 blanks, all 4026 lines
+
+Languages
++------------+------------+------------+------------+------------+------------+
+| language   | files      | code       | comment    | blank      | total      |
++------------+------------+------------+------------+------------+------------+
+| Dart       |         39 |      2,979 |        122 |        307 |      3,408 |
+| JSON       |         11 |        188 |          0 |          3 |        191 |
+| XML        |          9 |        130 |         53 |         13 |        196 |
+| YAML       |          3 |         30 |         82 |         19 |        131 |
+| HTML       |          1 |         19 |         15 |          5 |         39 |
+| Swift      |          2 |         19 |          2 |          6 |         27 |
+| Markdown   |          2 |         13 |          0 |          9 |         22 |
+| Properties |          2 |          8 |          0 |          2 |         10 |
+| C++        |          1 |          1 |          0 |          1 |          2 |
++------------+------------+------------+------------+------------+------------+
+
+Directories
++----------------------------------------------------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| path                                                                                                                                   | files      | code       | comment    | blank      | total      |
++----------------------------------------------------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| .                                                                                                                                      |         70 |      3,387 |        274 |        365 |      4,026 |
+| . (Files)                                                                                                                              |          4 |         40 |         82 |         26 |        148 |
+| android                                                                                                                                |          9 |         77 |         51 |         13 |        141 |
+| android (Files)                                                                                                                        |          1 |          3 |          0 |          1 |          4 |
+| android\app                                                                                                                            |          7 |         69 |         51 |         11 |        131 |
+| android\app\src                                                                                                                        |          7 |         69 |         51 |         11 |        131 |
+| android\app\src\debug                                                                                                                  |          1 |          3 |          4 |          1 |          8 |
+| android\app\src\main                                                                                                                   |          5 |         63 |         43 |          9 |        115 |
+| android\app\src\main (Files)                                                                                                           |          1 |         37 |         11 |          3 |         51 |
+| android\app\src\main\res                                                                                                               |          4 |         26 |         32 |          6 |         64 |
+| android\app\src\main\res\drawable                                                                                                      |          1 |          4 |          7 |          2 |         13 |
+| android\app\src\main\res\drawable-v21                                                                                                  |          1 |          4 |          7 |          2 |         13 |
+| android\app\src\main\res\values                                                                                                        |          1 |          9 |          9 |          1 |         19 |
+| android\app\src\main\res\values-night                                                                                                  |          1 |          9 |          9 |          1 |         19 |
+| android\app\src\profile                                                                                                                |          1 |          3 |          4 |          1 |          8 |
+| android\gradle                                                                                                                         |          1 |          5 |          0 |          1 |          6 |
+| android\gradle\wrapper                                                                                                                 |          1 |          5 |          0 |          1 |          6 |
+| assets                                                                                                                                 |          8 |          8 |          0 |          0 |          8 |
+| assets\animations                                                                                                                      |          8 |          8 |          0 |          0 |          8 |
+| ios                                                                                                                                    |          8 |        229 |          4 |         13 |        246 |
+| ios\Runner                                                                                                                             |          7 |        222 |          2 |          9 |        233 |
+| ios\Runner (Files)                                                                                                                     |          2 |         13 |          0 |          3 |         16 |
+| ios\RunnerTests                                                                                                                        |          1 |          7 |          2 |          4 |         13 |
+| ios\Runner\Assets.xcassets                                                                                                             |          3 |        148 |          0 |          4 |        152 |
+| ios\Runner\Assets.xcassets\AppIcon.appiconset                                                                                          |          1 |        122 |          0 |          1 |        123 |
+| ios\Runner\Assets.xcassets\LaunchImage.imageset                                                                                        |          2 |         26 |          0 |          3 |         29 |
+| ios\Runner\Base.lproj                                                                                                                  |          2 |         61 |          2 |          2 |         65 |
+| lib                                                                                                                                    |         39 |      2,979 |        122 |        307 |      3,408 |
+| lib (Files)                                                                                                                            |          1 |         39 |          1 |          3 |         43 |
+| lib\models                                                                                                                             |          3 |        156 |          7 |         14 |        177 |
+| lib\routes                                                                                                                             |          1 |         32 |          0 |          3 |         35 |
+| lib\services                                                                                                                           |          4 |        223 |         33 |         44 |        300 |
+| lib\viewmodels                                                                                                                         |          4 |        263 |         45 |         60 |        368 |
+| lib\views                                                                                                                              |         13 |      1,647 |         31 |        120 |      1,798 |
+| lib\views\admin                                                                                                                        |          7 |        864 |         11 |         72 |        947 |
+| lib\views\auth                                                                                                                         |          2 |        527 |          6 |         23 |        556 |
+| lib\views\recepcionista                                                                                                                |          1 |         14 |          0 |          3 |         17 |
+| lib\views\splash                                                                                                                       |          1 |         71 |          6 |         12 |         89 |
+| lib\views\veterinario                                                                                                                  |          1 |         14 |          0 |          3 |         17 |
+| lib\views\welcome                                                                                                                      |          1 |        157 |          8 |          7 |        172 |
+| lib\widgets                                                                                                                            |         13 |        619 |          5 |         63 |        687 |
+| web                                                                                                                                    |          2 |         54 |         15 |          6 |         75 |
++----------------------------------------------------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+
+Files
++----------------------------------------------------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| filename                                                                                                                               | language   | code       | comment    | blank      | total      |
++----------------------------------------------------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| c:\Users\Melany.MELANY\Desktop\proyecto\Proyecto 2025\DESARROLLO\zooland\README.md                                                     | Markdown   |         10 |          0 |          7 |         17 |
+| c:\Users\Melany.MELANY\Desktop\proyecto\Proyecto 2025\DESARROLLO\zooland\analysis_options.yaml                                         | YAML       |          3 |         22 |          4 |         29 |
+| c:\Users\Melany.MELANY\Desktop\proyecto\Proyecto 2025\DESARROLLO\zooland\android\app\src\debug\AndroidManifest.xml                     | XML        |          3 |          4 |          1 |          8 |
+| c:\Users\Melany.MELANY\Desktop\proyecto\Proyecto 2025\DESARROLLO\zooland\android\app\src\main\AndroidManifest.xml                      | XML        |         37 |         11 |          3 |         51 |
+| c:\Users\Melany.MELANY\Desktop\proyecto\Proyecto 2025\DESARROLLO\zooland\android\app\src\main\res\drawable-v21\launch_background.xml   | XML        |          4 |          7 |          2 |         13 |
+| c:\Users\Melany.MELANY\Desktop\proyecto\Proyecto 2025\DESARROLLO\zooland\android\app\src\main\res\drawable\launch_background.xml       | XML        |          4 |          7 |          2 |         13 |
+| c:\Users\Melany.MELANY\Desktop\proyecto\Proyecto 2025\DESARROLLO\zooland\android\app\src\main\res\values-night\styles.xml              | XML        |          9 |          9 |          1 |         19 |
+| c:\Users\Melany.MELANY\Desktop\proyecto\Proyecto 2025\DESARROLLO\zooland\android\app\src\main\res\values\styles.xml                    | XML        |          9 |          9 |          1 |         19 |
+| c:\Users\Melany.MELANY\Desktop\proyecto\Proyecto 2025\DESARROLLO\zooland\android\app\src\profile\AndroidManifest.xml                   | XML        |          3 |          4 |          1 |          8 |
+| c:\Users\Melany.MELANY\Desktop\proyecto\Proyecto 2025\DESARROLLO\zooland\android\gradle.properties                                     | Properties |          3 |          0 |          1 |          4 |
+| c:\Users\Melany.MELANY\Desktop\proyecto\Proyecto 2025\DESARROLLO\zooland\android\gradle\wrapper\gradle-wrapper.properties              | Properties |          5 |          0 |          1 |          6 |
+| c:\Users\Melany.MELANY\Desktop\proyecto\Proyecto 2025\DESARROLLO\zooland\assets\animations\dog1.json                                   | JSON       |          1 |          0 |          0 |          1 |
+| c:\Users\Melany.MELANY\Desktop\proyecto\Proyecto 2025\DESARROLLO\zooland\assets\animations\load1.json                                  | JSON       |          1 |          0 |          0 |          1 |
+| c:\Users\Melany.MELANY\Desktop\proyecto\Proyecto 2025\DESARROLLO\zooland\assets\animations\loading1.json                               | JSON       |          1 |          0 |          0 |          1 |
+| c:\Users\Melany.MELANY\Desktop\proyecto\Proyecto 2025\DESARROLLO\zooland\assets\animations\loading2.json                               | JSON       |          1 |          0 |          0 |          1 |
+| c:\Users\Melany.MELANY\Desktop\proyecto\Proyecto 2025\DESARROLLO\zooland\assets\animations\paws1.json                                  | JSON       |          1 |          0 |          0 |          1 |
+| c:\Users\Melany.MELANY\Desktop\proyecto\Proyecto 2025\DESARROLLO\zooland\assets\animations\pet1.json                                   | JSON       |          1 |          0 |          0 |          1 |
+| c:\Users\Melany.MELANY\Desktop\proyecto\Proyecto 2025\DESARROLLO\zooland\assets\animations\pet2.json                                   | JSON       |          1 |          0 |          0 |          1 |
+| c:\Users\Melany.MELANY\Desktop\proyecto\Proyecto 2025\DESARROLLO\zooland\assets\animations\pet3.json                                   | JSON       |          1 |          0 |          0 |          1 |
+| c:\Users\Melany.MELANY\Desktop\proyecto\Proyecto 2025\DESARROLLO\zooland\devtools_options.yaml                                         | YAML       |          3 |          0 |          1 |          4 |
+| c:\Users\Melany.MELANY\Desktop\proyecto\Proyecto 2025\DESARROLLO\zooland\ios\RunnerTests\RunnerTests.swift                             | Swift      |          7 |          2 |          4 |         13 |
+| c:\Users\Melany.MELANY\Desktop\proyecto\Proyecto 2025\DESARROLLO\zooland\ios\Runner\AppDelegate.swift                                  | Swift      |         12 |          0 |          2 |         14 |
+| c:\Users\Melany.MELANY\Desktop\proyecto\Proyecto 2025\DESARROLLO\zooland\ios\Runner\Assets.xcassets\AppIcon.appiconset\Contents.json   | JSON       |        122 |          0 |          1 |        123 |
+| c:\Users\Melany.MELANY\Desktop\proyecto\Proyecto 2025\DESARROLLO\zooland\ios\Runner\Assets.xcassets\LaunchImage.imageset\Contents.json | JSON       |         23 |          0 |          1 |         24 |
+| c:\Users\Melany.MELANY\Desktop\proyecto\Proyecto 2025\DESARROLLO\zooland\ios\Runner\Assets.xcassets\LaunchImage.imageset\README.md     | Markdown   |          3 |          0 |          2 |          5 |
+| c:\Users\Melany.MELANY\Desktop\proyecto\Proyecto 2025\DESARROLLO\zooland\ios\Runner\Base.lproj\LaunchScreen.storyboard                 | XML        |         36 |          1 |          1 |         38 |
+| c:\Users\Melany.MELANY\Desktop\proyecto\Proyecto 2025\DESARROLLO\zooland\ios\Runner\Base.lproj\Main.storyboard                         | XML        |         25 |          1 |          1 |         27 |
+| c:\Users\Melany.MELANY\Desktop\proyecto\Proyecto 2025\DESARROLLO\zooland\ios\Runner\Runner-Bridging-Header.h                           | C++        |          1 |          0 |          1 |          2 |
+| c:\Users\Melany.MELANY\Desktop\proyecto\Proyecto 2025\DESARROLLO\zooland\lib\main.dart                                                 | Dart       |         39 |          1 |          3 |         43 |
+| c:\Users\Melany.MELANY\Desktop\proyecto\Proyecto 2025\DESARROLLO\zooland\lib\models\mascota_model.dart                                 | Dart       |         63 |          0 |          5 |         68 |
+| c:\Users\Melany.MELANY\Desktop\proyecto\Proyecto 2025\DESARROLLO\zooland\lib\models\propietario_model.dart                             | Dart       |         35 |          0 |          5 |         40 |
+| c:\Users\Melany.MELANY\Desktop\proyecto\Proyecto 2025\DESARROLLO\zooland\lib\models\usuario_model.dart                                 | Dart       |         58 |          7 |          4 |         69 |
+| c:\Users\Melany.MELANY\Desktop\proyecto\Proyecto 2025\DESARROLLO\zooland\lib\routes\app_rutas.dart                                     | Dart       |         32 |          0 |          3 |         35 |
+| c:\Users\Melany.MELANY\Desktop\proyecto\Proyecto 2025\DESARROLLO\zooland\lib\services\auth_service.dart                                | Dart       |         39 |          8 |          6 |         53 |
+| c:\Users\Melany.MELANY\Desktop\proyecto\Proyecto 2025\DESARROLLO\zooland\lib\services\mascota_service.dart                             | Dart       |         42 |          5 |         12 |         59 |
+| c:\Users\Melany.MELANY\Desktop\proyecto\Proyecto 2025\DESARROLLO\zooland\lib\services\propietario_service.dart                         | Dart       |         22 |          2 |          6 |         30 |
+| c:\Users\Melany.MELANY\Desktop\proyecto\Proyecto 2025\DESARROLLO\zooland\lib\services\usuario_service.dart                             | Dart       |        120 |         18 |         20 |        158 |
+| c:\Users\Melany.MELANY\Desktop\proyecto\Proyecto 2025\DESARROLLO\zooland\lib\viewmodels\auth_viewmodel.dart                            | Dart       |         67 |         33 |         22 |        122 |
+| c:\Users\Melany.MELANY\Desktop\proyecto\Proyecto 2025\DESARROLLO\zooland\lib\viewmodels\mascota_viewmodel.dart                         | Dart       |         52 |          4 |         13 |         69 |
+| c:\Users\Melany.MELANY\Desktop\proyecto\Proyecto 2025\DESARROLLO\zooland\lib\viewmodels\propietario_viewmodel.dart                     | Dart       |         57 |          2 |         10 |         69 |
+| c:\Users\Melany.MELANY\Desktop\proyecto\Proyecto 2025\DESARROLLO\zooland\lib\viewmodels\usuario_viewmodel.dart                         | Dart       |         87 |          6 |         15 |        108 |
+| c:\Users\Melany.MELANY\Desktop\proyecto\Proyecto 2025\DESARROLLO\zooland\lib\views\admin\admin_page.dart                               | Dart       |         51 |          0 |          8 |         59 |
+| c:\Users\Melany.MELANY\Desktop\proyecto\Proyecto 2025\DESARROLLO\zooland\lib\views\admin\ajustes_page.dart                             | Dart       |         92 |          5 |          6 |        103 |
+| c:\Users\Melany.MELANY\Desktop\proyecto\Proyecto 2025\DESARROLLO\zooland\lib\views\admin\editar_usuario_page.dart                      | Dart       |        150 |          1 |         12 |        163 |
+| c:\Users\Melany.MELANY\Desktop\proyecto\Proyecto 2025\DESARROLLO\zooland\lib\views\admin\lista_pacientes.dart                          | Dart       |        123 |          1 |          7 |        131 |
+| c:\Users\Melany.MELANY\Desktop\proyecto\Proyecto 2025\DESARROLLO\zooland\lib\views\admin\menu_page.dart                                | Dart       |         76 |          1 |          4 |         81 |
+| c:\Users\Melany.MELANY\Desktop\proyecto\Proyecto 2025\DESARROLLO\zooland\lib\views\admin\registro_paciente.dart                        | Dart       |        231 |          2 |         25 |        258 |
+| c:\Users\Melany.MELANY\Desktop\proyecto\Proyecto 2025\DESARROLLO\zooland\lib\views\admin\usuarios_page.dart                            | Dart       |        141 |          1 |         10 |        152 |
+| c:\Users\Melany.MELANY\Desktop\proyecto\Proyecto 2025\DESARROLLO\zooland\lib\views\auth\login_page.dart                                | Dart       |        254 |          3 |         11 |        268 |
+| c:\Users\Melany.MELANY\Desktop\proyecto\Proyecto 2025\DESARROLLO\zooland\lib\views\auth\registro_page.dart                             | Dart       |        273 |          3 |         12 |        288 |
+| c:\Users\Melany.MELANY\Desktop\proyecto\Proyecto 2025\DESARROLLO\zooland\lib\views\recepcionista\recepcionista_page.dart               | Dart       |         14 |          0 |          3 |         17 |
+| c:\Users\Melany.MELANY\Desktop\proyecto\Proyecto 2025\DESARROLLO\zooland\lib\views\splash\splash_page.dart                             | Dart       |         71 |          6 |         12 |         89 |
+| c:\Users\Melany.MELANY\Desktop\proyecto\Proyecto 2025\DESARROLLO\zooland\lib\views\veterinario\veterinario_page.dart                   | Dart       |         14 |          0 |          3 |         17 |
+| c:\Users\Melany.MELANY\Desktop\proyecto\Proyecto 2025\DESARROLLO\zooland\lib\views\welcome\welcome_page.dart                           | Dart       |        157 |          8 |          7 |        172 |
+| c:\Users\Melany.MELANY\Desktop\proyecto\Proyecto 2025\DESARROLLO\zooland\lib\widgets\boton.dart                                        | Dart       |         63 |          0 |          3 |         66 |
+| c:\Users\Melany.MELANY\Desktop\proyecto\Proyecto 2025\DESARROLLO\zooland\lib\widgets\botonQR.dart                                      | Dart       |         39 |          0 |          4 |         43 |
+| c:\Users\Melany.MELANY\Desktop\proyecto\Proyecto 2025\DESARROLLO\zooland\lib\widgets\boton_icono.dart                                  | Dart       |         51 |          2 |          4 |         57 |
+| c:\Users\Melany.MELANY\Desktop\proyecto\Proyecto 2025\DESARROLLO\zooland\lib\widgets\campo_text.dart                                   | Dart       |         48 |          1 |          4 |         53 |
+| c:\Users\Melany.MELANY\Desktop\proyecto\Proyecto 2025\DESARROLLO\zooland\lib\widgets\cardBoton.dart                                    | Dart       |         86 |          0 |          9 |         95 |
+| c:\Users\Melany.MELANY\Desktop\proyecto\Proyecto 2025\DESARROLLO\zooland\lib\widgets\container_widget.dart                             | Dart       |         38 |          0 |          5 |         43 |
+| c:\Users\Melany.MELANY\Desktop\proyecto\Proyecto 2025\DESARROLLO\zooland\lib\widgets\dropdown.dart                                     | Dart       |         65 |          0 |          4 |         69 |
+| c:\Users\Melany.MELANY\Desktop\proyecto\Proyecto 2025\DESARROLLO\zooland\lib\widgets\encabezado_circular.dart                          | Dart       |         43 |          1 |          4 |         48 |
+| c:\Users\Melany.MELANY\Desktop\proyecto\Proyecto 2025\DESARROLLO\zooland\lib\widgets\fondo.dart                                        | Dart       |         29 |          1 |          4 |         34 |
+| c:\Users\Melany.MELANY\Desktop\proyecto\Proyecto 2025\DESARROLLO\zooland\lib\widgets\navbar.dart                                       | Dart       |         63 |          0 |          9 |         72 |
+| c:\Users\Melany.MELANY\Desktop\proyecto\Proyecto 2025\DESARROLLO\zooland\lib\widgets\pantallaCarga.dart                                | Dart       |         24 |          0 |          3 |         27 |
+| c:\Users\Melany.MELANY\Desktop\proyecto\Proyecto 2025\DESARROLLO\zooland\lib\widgets\texto_link copy.dart                              | Dart       |         35 |          0 |          5 |         40 |
+| c:\Users\Melany.MELANY\Desktop\proyecto\Proyecto 2025\DESARROLLO\zooland\lib\widgets\texto_link.dart                                   | Dart       |         35 |          0 |          5 |         40 |
+| c:\Users\Melany.MELANY\Desktop\proyecto\Proyecto 2025\DESARROLLO\zooland\pubspec.yaml                                                  | YAML       |         24 |         60 |         14 |         98 |
+| c:\Users\Melany.MELANY\Desktop\proyecto\Proyecto 2025\DESARROLLO\zooland\web\index.html                                                | HTML       |         19 |         15 |          5 |         39 |
+| c:\Users\Melany.MELANY\Desktop\proyecto\Proyecto 2025\DESARROLLO\zooland\web\manifest.json                                             | JSON       |         35 |          0 |          1 |         36 |
+| Total                                                                                                                                  |            |      3,387 |        274 |        365 |      4,026 |
++----------------------------------------------------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
