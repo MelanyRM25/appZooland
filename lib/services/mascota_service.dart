@@ -55,4 +55,19 @@ class MascotaService {
       throw Exception('Error al obtener mascotas: $e');
     }
   }
+  //Obtener mascota por ID 
+  Future<Mascota?> obtenerMascotaPorId(String id) async {
+  try {
+    final data = await _client
+        .from('mascotas')
+        .select()
+        .eq('id', id)
+        .single();
+
+    return Mascota.fromMap(data);
+  } catch (e) {
+    throw Exception('Error al obtener la mascota: $e');
+  }
+}
+
 }

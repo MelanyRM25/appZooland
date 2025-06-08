@@ -64,5 +64,15 @@ Future<void> cargarMascotas() async {
     notifyListeners();
   }
 }
+Future<Mascota?> obtenerMascotaPorId(String id) async {
+  try {
+    return await _mascotaService.obtenerMascotaPorId(id);
+  } catch (e) {
+    _error = 'Error al obtener la mascota: $e';
+    notifyListeners();
+    return null;
+  }
+}
+
 
 }

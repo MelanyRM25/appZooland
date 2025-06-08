@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:zooland/views/admin/admin_page.dart';
 import 'package:zooland/views/admin/lista_pacientes.dart';
+import 'package:zooland/views/admin/mascota_page.dart';
 import 'package:zooland/views/admin/registro_paciente.dart';
+import 'package:zooland/views/admin/scaneo_qr.dart';
 import 'package:zooland/views/auth/login_page.dart';
 import 'package:zooland/views/auth/registro_page.dart';
 import 'package:zooland/views/splash/splash_page.dart';
@@ -19,6 +21,8 @@ class AppRutas {
   static const admin = '/admin';
   static const registro_paciente = '/registro_paciente';
   static const lista_paciente = '/lista_paciente';
+  static const mascota_page = '/mascota_page';
+  static const escaner_qr = '/escaner_qr';
 
   static Map<String, WidgetBuilder> get routes => {
     splash: (context) => SplashScreen(),
@@ -30,5 +34,7 @@ class AppRutas {
     admin: (context) => AdminPage(),
     registro_paciente: (context) => RegistroPaciente(), // 👈 agregar registro paciente
     lista_paciente: (context) => ListaMascotasScreen(),
+    mascota_page: (context) => MascotaPage(),
+    escaner_qr: (context) => EscanerQRPage(),
   };
 }

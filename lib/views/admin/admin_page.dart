@@ -39,7 +39,7 @@ class _AdminPageState extends State<AdminPage> {
     ?  BotonQR(
         imagePath: 'assets/images/qr.png',
         onPressed: () {
-          Navigator.pushReplacementNamed(context, AppRutas.veterinario);
+            Navigator.pushNamed(context, AppRutas.escaner_qr);
         },
       )
       :null,
