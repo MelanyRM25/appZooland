@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:zooland/routes/app_rutas.dart';
 import 'package:zooland/services/auth_service.dart';
 import 'package:zooland/services/usuario_service.dart';
 import 'package:zooland/models/usuario_model.dart';
@@ -107,6 +108,7 @@ Future<void> registrarUsuario(
   //     debugPrint("Error al cargar usuario actual: $e");
   //   }
   // }
+  
 
   // // Método para cerrar sesión
   // Future<void> cerrarSesion() async {
@@ -118,4 +120,15 @@ Future<void> registrarUsuario(
   //     debugPrint("Error al cerrar sesión: $e");
   //   }
   // }
+  Future<void> cerrarSesion(BuildContext context) async {
+  await _authService.cerrarSesion();
+
+  // Redirige al login y elimina historial de navegación
+  Navigator.pushNamedAndRemoveUntil(
+    context,
+    AppRutas.login,
+    (Route<dynamic> route) => false,
+  );
+}
+
 }

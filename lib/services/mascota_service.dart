@@ -8,6 +8,7 @@ class MascotaService {
 
   /// Inserta una mascota y devuelve su ID generado.
   Future<String> insertarMascota(Mascota mascota) async {
+    
     final result = await _client
         .from('mascotas')
         .insert(mascota.toMap())
@@ -70,4 +71,22 @@ class MascotaService {
   }
 }
 
+/// Actualiza únicamente el contenido del QR para la mascota dada
+// En MascotaService
+Future<void> actualizarQrData(String idMascota, String qrData) async {
+  final response = await _client
+    .from('mascotas')
+    .update({'qr_data': qrData})
+    .eq('id', idMascota)
+    .select()
+    .single();  // Trae de vuelta el registro actualizado
+
+  if (response == null || response['qr_data'] != qrData) {
+    throw Exception('No se actualizó qr_data correctamente');
+  }
 }
+
+
+}
+
+

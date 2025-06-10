@@ -73,6 +73,23 @@ Future<Mascota?> obtenerMascotaPorId(String id) async {
     return null;
   }
 }
+// En MascotaViewModel
+Future<void> guardarQrEnBase(String mascotaId, String qrData) async {
+  _isLoading = true;
+  notifyListeners();
+
+  try {
+    await _mascotaService.actualizarQrData(mascotaId, qrData);
+  } catch (e) {
+    _error = 'Error al guardar QR en DB: $e';
+    rethrow; // para que la UI también lo vea si hace await
+  } finally {
+    _isLoading = false;
+    notifyListeners();
+  }
+}
+
+
 
 
 }

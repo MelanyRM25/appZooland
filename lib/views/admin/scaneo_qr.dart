@@ -19,10 +19,12 @@ class _EscanerQRPageState extends State<EscanerQRPage> {
     if (!_isScanning) return;
 
     final String? codigo = capture.barcodes.first.rawValue;
+    print('QR detectado: $codigo'); // 🐞 Debug: ID leído
+
     if (codigo == null) return;
 
     setState(() {
-      _isScanning = false; // Para evitar múltiples lecturas
+      _isScanning = false; // Evitar múltiples lecturas
     });
 
     final mascotaVM = Provider.of<MascotaViewModel>(context, listen: false);
@@ -30,18 +32,21 @@ class _EscanerQRPageState extends State<EscanerQRPage> {
     try {
       final mascota = await mascotaVM.obtenerMascotaPorId(codigo);
       if (mascota != null) {
+        print('Mascota encontrada: ${mascota.nombre}'); // 🐞 Debug: Mascota encontrada
         Navigator.pushReplacementNamed(
           context,
           AppRutas.mascota_page,
           arguments: mascota,
         );
       } else {
+        print('No se encontró mascota con ID: $codigo');
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text('Mascota no encontrada')),
         );
         Navigator.pop(context);
       }
     } catch (e) {
+      print('Error al buscar mascota: $e');
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Error al buscar mascota: $e')),
       );
@@ -57,7 +62,8 @@ class _EscanerQRPageState extends State<EscanerQRPage> {
       ),
       body: Stack(
         children: [
-          MobileScanner(            
+          MobileScanner(
+            controller: MobileScannerController(),
             onDetect: _onDetect,
           ),
           Center(

@@ -14,6 +14,7 @@ void main() async {
     url: 'https://uxwwkzzjgxyzkjztsidb.supabase.co',
     anonKey:
         'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InV4d3drenpqZ3h5emtqenRzaWRiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDM2MDI4MzIsImV4cCI6MjA1OTE3ODgzMn0.pXTmasQ4h7VR73DWApjxe-pyKjOje8NMhQakHrL2EYY',
+        
   );
   runApp(
     MultiProvider(

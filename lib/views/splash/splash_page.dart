@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:zooland/routes/app_rutas.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -20,35 +21,35 @@ class _SplashScreenState extends State<SplashScreen>
       duration: Duration(seconds: 2),
     );
 
-    // Animación de opacidad
     _opacityAnimation = Tween<double>(
       begin: 0.0,
       end: 1.0,
     ).animate(CurvedAnimation(parent: _controller, curve: Curves.easeInOut));
 
-    // Animación de escala
     _scaleAnimation = Tween<double>(
       begin: 0.5,
       end: 1.0,
     ).animate(CurvedAnimation(parent: _controller, curve: Curves.easeInOut));
 
-    // Iniciar la animación
     _controller.forward();
 
-    // Espera antes de redirigir
     _controller.addStatusListener((status) {
       if (status == AnimationStatus.completed) {
-        _startSplashAnimation(); // Inicia la transición después de que la animación termine
+        _startSplashAnimation();
       }
     });
   }
 
-  // Simula la animación y transición
   void _startSplashAnimation() async {
-    await Future.delayed(
-      Duration(seconds: 3),
-    ); // Espera 1 segundo después de completar la animación
-Navigator.pushReplacementNamed(context, AppRutas.welcome);
+    await Future.delayed(const Duration(seconds: 1));
+
+    final session = Supabase.instance.client.auth.currentSession;
+
+    if (session != null) {
+      Navigator.pushReplacementNamed(context, AppRutas.admin);
+    } else {
+      Navigator.pushReplacementNamed(context, AppRutas.welcome);
+    }
   }
 
   @override
@@ -57,20 +58,19 @@ Navigator.pushReplacementNamed(context, AppRutas.welcome);
     final screenWidth = MediaQuery.of(context).size.width;
 
     return Scaffold(
-      backgroundColor: Colors.white, // Fondo blanco
+      backgroundColor: Colors.white,
       body: Stack(
         children: [
-          // Animación con opacidad y escala del logo PNG
           Center(
             child: FadeTransition(
               opacity: _opacityAnimation,
               child: ScaleTransition(
                 scale: _scaleAnimation,
                 child: Image.asset(
-                  'assets/images/logo_zooland.png', // Ruta del archivo PNG del logo
-                  width: screenWidth * 0.5, // Ancho de la imagen
-                  height: screenHeight * 0.5, // Alto de la imagen
-                  fit: BoxFit.contain, // Ajuste para que no se recorte
+                  'assets/images/logo_zooland.png',
+                  width: screenWidth * 0.5,
+                  height: screenHeight * 0.5,
+                  fit: BoxFit.contain,
                 ),
               ),
             ),
@@ -82,7 +82,7 @@ Navigator.pushReplacementNamed(context, AppRutas.welcome);
 
   @override
   void dispose() {
-    _controller.dispose(); // Limpia el controlador de animaciones
+    _controller.dispose();
     super.dispose();
   }
 }

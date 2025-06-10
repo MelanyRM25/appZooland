@@ -7,7 +7,7 @@ class CampoTextoRedondeado extends StatelessWidget {
   final TextInputType keyboardType;
   final TextEditingController? controller;
   final IconButton? suffixIcon;
-  final String? Function(String?)? validator;  // <-- parámetro validator opcional
+  final String? Function(String?)? validator;
 
   const CampoTextoRedondeado({
     Key? key,
@@ -17,34 +17,33 @@ class CampoTextoRedondeado extends StatelessWidget {
     this.keyboardType = TextInputType.text,
     this.controller,
     this.suffixIcon,
-    this.validator,  // <-- agregar validator en constructor
+    this.validator,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      // Aquí puedes añadir decoración si quieres
-      child: TextFormField(   // <-- Cambiado a TextFormField
-        controller: controller,
-        obscureText: obscureText,
-        keyboardType: keyboardType,
-        cursorColor: const Color.fromARGB(255, 18, 173, 162),
-        style: const TextStyle(color: Colors.black),
-        validator: validator,  // <-- usar validator aquí
-        decoration: InputDecoration(
-          hintText: hintText,
-          hintStyle: const TextStyle(color: Colors.grey),
-          prefixIcon: Icon(icono, color: const Color.fromARGB(255, 18, 173, 162)),
-          suffixIcon: suffixIcon,
-          border: const UnderlineInputBorder(
-            borderSide: BorderSide(color: Colors.grey),
-          ),
-          enabledBorder: const UnderlineInputBorder(
-            borderSide: BorderSide(color: Color.fromARGB(255, 255, 255, 255)),
-          ),
-          focusedBorder: const UnderlineInputBorder(
-            borderSide: BorderSide(color: Color.fromARGB(255, 18, 173, 162), width: 1),
-          ),
+    return TextFormField(
+      controller: controller,
+      obscureText: obscureText,
+      keyboardType: keyboardType,
+      cursorColor: Colors.teal,
+      style: const TextStyle(color: Colors.black),
+      validator: validator,
+      decoration: InputDecoration(
+        hintText: hintText,
+        hintStyle: const TextStyle(color: Colors.grey),
+        prefixIcon: Icon(icono, color: Colors.teal),
+        suffixIcon: suffixIcon,
+        filled: true,
+        fillColor: Colors.white.withOpacity(0.9),
+        contentPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 18),
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(30),
+          borderSide: BorderSide.none,
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(30),
+          borderSide: const BorderSide(color: Colors.teal, width: 1),
         ),
       ),
     );

@@ -5,6 +5,10 @@ import 'package:provider/provider.dart';
 import 'package:zooland/models/mascota_model.dart';
 import 'package:zooland/viewmodels/propietario_viewmodel.dart';
 import 'package:zooland/viewmodels/mascota_viewmodel.dart';
+import 'package:zooland/widgets/fondo.dart';
+import 'package:zooland/widgets/boton_icono.dart';
+import 'package:zooland/widgets/campo_text.dart';
+import 'package:zooland/widgets/boton.dart';
 
 class RegistroPaciente extends StatefulWidget {
   const RegistroPaciente({Key? key}) : super(key: key);
@@ -16,7 +20,7 @@ class RegistroPaciente extends StatefulWidget {
 class _RegistroPacienteState extends State<RegistroPaciente> {
   final _formKey = GlobalKey<FormState>();
 
-  // Controladores propietario
+  // Propietario
   final nombrePropController = TextEditingController();
   final apellidoPatPropController = TextEditingController();
   final apellidoMatPropController = TextEditingController();
@@ -24,10 +28,9 @@ class _RegistroPacienteState extends State<RegistroPaciente> {
   final celularPropController = TextEditingController();
   final referenciaPropController = TextEditingController();
 
-  // Controladores mascota
+  // Mascota
   final nombreMascotaController = TextEditingController();
   final colorController = TextEditingController();
-
   String? especieSeleccionada;
   String? razaSeleccionada;
   String? sexoMascota;
@@ -52,16 +55,82 @@ class _RegistroPacienteState extends State<RegistroPaciente> {
     super.dispose();
   }
 
-  void _limpiarCampos() {
-    _formKey.currentState?.reset();
-    nombrePropController.clear();
-    apellidoPatPropController.clear();
-    apellidoMatPropController.clear();
-    direccionPropController.clear();
-    celularPropController.clear();
-    referenciaPropController.clear();
-    nombreMascotaController.clear();
-    colorController.clear();
+  List<String> getRazasPorEspecie() {
+    if (especieSeleccionada == 'Perro') return razasPerro;
+    if (especieSeleccionada == 'Gato') return razasGato;
+    return [];
+  }
+
+  Future<void> _seleccionarImagen() async {
+    final picker = ImagePicker();
+    final picked = await picker.pickImage(source: ImageSource.gallery);
+    if (picked != null) setState(() => imagenMascota = File(picked.path));
+  }
+
+  String? _validarRequerido(String? value) {
+    if (value == null || value.trim().isEmpty) return 'Este campo es requerido';
+    return null;
+  }
+
+  Future<void> _registrarPaciente() async {
+    if (!_formKey.currentState!.validate() ||
+        fechaNacimientoMascota == null ||
+        sexoMascota == null ||
+        especieSeleccionada == null ||
+        razaSeleccionada == null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Complete todos los campos')),
+      );
+      return;
+    }
+
+    final propVM = context.read<PropietarioViewModel>();
+    final mascVM = context.read<MascotaViewModel>();
+
+    final propietarioId = await propVM.registrarPropietario(
+      nombre: nombrePropController.text.trim(),
+      apellidoPaterno: apellidoPatPropController.text.trim(),
+      apellidoMaterno: apellidoMatPropController.text.trim(),
+      direccion: direccionPropController.text.trim(),
+      celular: celularPropController.text.trim(),
+      numReferencia: referenciaPropController.text.trim(),
+    );
+
+    if (propietarioId == null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(propVM.error ?? 'Error al registrar propietario')),
+      );
+      return;
+    }
+
+    final mascota = Mascota(
+      idPropietario: propietarioId,
+      nombre: nombreMascotaController.text.trim(),
+      especie: especieSeleccionada!,
+      raza: razaSeleccionada!,
+      sexo: sexoMascota!,
+      color: colorController.text.trim(),
+      fechaNacimiento: fechaNacimientoMascota!,
+      imagen_url: null,
+    );
+
+    await mascVM.registrarMascotaConImagen(
+      mascota: mascota,
+      imagen: imagenMascota!,
+    );
+
+    if (mascVM.error != null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(mascVM.error!)),
+      );
+      return;
+    }
+
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(content: Text('Paciente registrado con éxito')),
+    );
+
+    _formKey.currentState!.reset();
     setState(() {
       especieSeleccionada = null;
       razaSeleccionada = null;
@@ -71,187 +140,254 @@ class _RegistroPacienteState extends State<RegistroPaciente> {
     });
   }
 
-  List<String> getRazasPorEspecie() {
-    if (especieSeleccionada == 'Perro') return razasPerro;
-    if (especieSeleccionada == 'Gato') return razasGato;
-    return [];
-  }
-
-  Future<void> _seleccionarImagen() async {
-    final picker = ImagePicker();
-    final pickedFile = await picker.pickImage(source: ImageSource.gallery);
-
-    if (pickedFile != null) {
-      setState(() {
-        imagenMascota = File(pickedFile.path);
-      });
-    }
-  }
-
-  Future<void> _registrarPaciente() async {
-    if (!_formKey.currentState!.validate()) return;
-
-    if (fechaNacimientoMascota == null || sexoMascota == null || especieSeleccionada == null || razaSeleccionada == null) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Complete todos los datos de la mascota.')),
-      );
-      return;
-    }
-
-    final propietarioVM = Provider.of<PropietarioViewModel>(context, listen: false);
-    final mascotaVM = Provider.of<MascotaViewModel>(context, listen: false);
-
-    final propietarioId = await propietarioVM.registrarPropietario(
-      nombre: nombrePropController.text,
-      apellidoPaterno: apellidoPatPropController.text,
-      apellidoMaterno: apellidoMatPropController.text,
-      direccion: direccionPropController.text,
-      celular: celularPropController.text,
-      numReferencia: referenciaPropController.text,
-    );
-
-    if (propietarioId == null) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(propietarioVM.error ?? 'Error al registrar propietario')),
-      );
-      return;
-    }
-
-    final mascota = Mascota(
-      idPropietario: propietarioId,
-      nombre: nombreMascotaController.text,
-      especie: especieSeleccionada!,
-      raza: razaSeleccionada!,
-      fechaNacimiento: fechaNacimientoMascota!,
-      sexo: sexoMascota!,
-      color: colorController.text,
-      imagen_url: null,
-    );
-
-    try {
-      await mascotaVM.registrarMascotaConImagen(
-        mascota: mascota,
-        imagen: imagenMascota!,
-      );
-
-      if (mascotaVM.error != null) {
-        throw Exception(mascotaVM.error);
-      }
-
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('¡Paciente registrado con éxito!')),
-      );
-      _limpiarCampos();
-    } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Error: $e')),
-      );
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
-    final propietarioVM = context.watch<PropietarioViewModel>();
-    final mascotaVM = context.watch<MascotaViewModel>();
-    final cargando = propietarioVM.isLoading || mascotaVM.isLoading;
+    final cargando = context.watch<PropietarioViewModel>().isLoading ||
+        context.watch<MascotaViewModel>().isLoading;
+    final h = MediaQuery.of(context).size.height;
+    final w = MediaQuery.of(context).size.width;
 
     return Scaffold(
-      appBar: AppBar(title: const Text('Registro de Paciente')),
+      extendBodyBehindAppBar: true,
       body: Stack(
         children: [
-          Padding(
-            padding: const EdgeInsets.all(16),
-            child: Form(
-              key: _formKey,
-              child: ListView(
-                children: [
-                  const Text('Datos del Propietario', style: TextStyle(fontWeight: FontWeight.bold)),
-                  TextFormField(controller: nombrePropController, decoration: const InputDecoration(labelText: 'Nombre'), validator: _validarCampo),
-                  TextFormField(controller: apellidoPatPropController, decoration: const InputDecoration(labelText: 'Apellido paterno'), validator: _validarCampo),
-                  TextFormField(controller: apellidoMatPropController, decoration: const InputDecoration(labelText: 'Apellido materno'), validator: _validarCampo),
-                  TextFormField(controller: direccionPropController, decoration: const InputDecoration(labelText: 'Dirección'), validator: _validarCampo),
-                  TextFormField(controller: celularPropController, decoration: const InputDecoration(labelText: 'Celular'), keyboardType: TextInputType.phone, validator: _validarCampo),
-                  TextFormField(controller: referenciaPropController, decoration: const InputDecoration(labelText: 'Referencia'), validator: _validarCampo),
-                  const SizedBox(height: 20),
-                  const Text('Datos de la Mascota', style: TextStyle(fontWeight: FontWeight.bold)),
-                  TextFormField(controller: nombreMascotaController, decoration: const InputDecoration(labelText: 'Nombre de la mascota'), validator: _validarCampo),
-                  DropdownButtonFormField<String>(
-                    value: especieSeleccionada,
-                    decoration: const InputDecoration(labelText: 'Especie'),
-                    items: especies.map((e) => DropdownMenuItem(value: e, child: Text(e))).toList(),
-                    onChanged: (value) => setState(() {
-                      especieSeleccionada = value;
-                      razaSeleccionada = null;
-                    }),
-                    validator: (value) => value == null ? 'Seleccione una especie' : null,
-                  ),
-                  DropdownButtonFormField<String>(
-                    value: razaSeleccionada,
-                    decoration: const InputDecoration(labelText: 'Raza'),
-                    items: getRazasPorEspecie().map((r) => DropdownMenuItem(value: r, child: Text(r))).toList(),
-                    onChanged: (value) => setState(() => razaSeleccionada = value),
-                    validator: (value) => value == null ? 'Seleccione una raza' : null,
-                  ),
-                  DropdownButtonFormField<String>(
-                    value: sexoMascota,
-                    decoration: const InputDecoration(labelText: 'Sexo'),
-                    items: sexos.map((s) => DropdownMenuItem(value: s, child: Text(s))).toList(),
-                    onChanged: (value) => setState(() => sexoMascota = value),
-                    validator: (value) => value == null ? 'Seleccione el sexo' : null,
-                  ),
-                  TextFormField(controller: colorController, decoration: const InputDecoration(labelText: 'Color'), validator: _validarCampo),
-                  const SizedBox(height: 10),
-                  Row(
-                    children: [
-                      Expanded(
-                        child: Text(fechaNacimientoMascota == null
-                            ? 'Fecha de nacimiento: no seleccionada'
-                            : 'Fecha de nacimiento: ${fechaNacimientoMascota!.toLocal()}'.split(' ')[0]),
-                      ),
-                      TextButton(
-                        onPressed: () async {
-                          final fecha = await showDatePicker(
-                            context: context,
-                            initialDate: DateTime.now(),
-                            firstDate: DateTime(2000),
-                            lastDate: DateTime.now(),
-                          );
-                          if (fecha != null) {
-                            setState(() => fechaNacimientoMascota = fecha);
-                          }
-                        },
-                        child: const Text('Seleccionar'),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 10),
-                  imagenMascota != null
-                      ? Image.file(imagenMascota!, height: 150)
-                      : const Text('No se ha seleccionado imagen'),
-                  ElevatedButton(
-                    onPressed: _seleccionarImagen,
-                    child: const Text('Seleccionar imagen'),
-                  ),
-                  const SizedBox(height: 20),
-                  ElevatedButton(
-                    onPressed: cargando ? null : _registrarPaciente,
-                    child: Text(cargando ? 'Registrando...' : 'Registrar'),
-                  ),
-                ],
+          Fondo(
+            coloresDegradado: const [Color(0xFFE0F7FA), Color(0xFFB2EBF2)],
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+          ),
+          SafeArea(
+            child: SingleChildScrollView(
+              padding: EdgeInsets.symmetric(horizontal: w * 0.06, vertical: h * 0.02),
+              child: Form(
+                key: _formKey,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    BotonIcono(
+                      onPressed: () => Navigator.pop(context),
+                      icon: Icons.arrow_back,
+                      iconColor: Colors.teal,
+                      iconSize: 30,
+                    ),
+                    SizedBox(height: h * 0.015),
+                    _buildSeccionConTitulo(
+                      titulo: 'Datos del Propietario',
+                      children: [
+                        CampoTextoRedondeado(
+                          hintText: 'Nombre',
+                          icono: Icons.person_outline,
+                          controller: nombrePropController,
+                          validator: _validarRequerido,
+                        ),
+                        CampoTextoRedondeado(
+                          hintText: 'Apellido paterno',
+                          icono: Icons.person_outline,
+                          controller: apellidoPatPropController,
+                          validator: _validarRequerido,
+                        ),
+                        CampoTextoRedondeado(
+                          hintText: 'Apellido materno',
+                          icono: Icons.person_outline,
+                          controller: apellidoMatPropController,
+                          validator: _validarRequerido,
+                        ),
+                        CampoTextoRedondeado(
+                          hintText: 'Dirección',
+                          icono: Icons.home_outlined,
+                          controller: direccionPropController,
+                          validator: _validarRequerido,
+                        ),
+                        CampoTextoRedondeado(
+                          hintText: 'Celular',
+                          icono: Icons.phone_outlined,
+                          controller: celularPropController,
+                          keyboardType: TextInputType.phone,
+                          validator: _validarRequerido,
+                        ),
+                        CampoTextoRedondeado(
+                          hintText: 'Referencia numérica',
+                          icono: Icons.numbers,
+                          controller: referenciaPropController,
+                          keyboardType: TextInputType.number,
+                          validator: _validarRequerido,
+                        ),
+                      ],
+                    ),
+                    _buildSeccionConTitulo(
+                      titulo: 'Datos de la Mascota',
+                      children: [
+                        CampoTextoRedondeado(
+                          hintText: 'Nombre mascota',
+                          icono: Icons.pets_outlined,
+                          controller: nombreMascotaController,
+                          validator: _validarRequerido,
+                        ),
+                        _buildDropdown('Especie', especieSeleccionada, especies,
+                            Icons.category_outlined, (v) {
+                          setState(() {
+                            especieSeleccionada = v;
+                            razaSeleccionada = null;
+                          });
+                        }),
+                        _buildDropdown('Raza', razaSeleccionada, getRazasPorEspecie(),
+                            Icons.pets, (v) {
+                          setState(() => razaSeleccionada = v);
+                        }),
+                        _buildDropdown(
+                            'Sexo', sexoMascota, sexos, Icons.wc_outlined, (v) {
+                          setState(() => sexoMascota = v);
+                        }),
+                        CampoTextoRedondeado(
+                          hintText: 'Color',
+                          icono: Icons.format_paint_outlined,
+                          controller: colorController,
+                          validator: _validarRequerido,
+                        ),
+                        _buildFechaNacimiento(),
+                        _buildSelectorImagen(),
+                      ],
+                    ),
+                    SizedBox(height: h * 0.025),
+                    cargando
+                        ? const Center(child: CircularProgressIndicator())
+                        : Center(
+                            child: BotonWidget(
+                              texto: 'Registrar Paciente',
+                              coloresDegradado: const [
+                                Color(0xFF12AD9F),
+                                Color(0xFF0E86E8)
+                              ],
+                              onPressed: _registrarPaciente,
+                            ),
+                          ),
+                    SizedBox(height: h * 0.04),
+                  ],
+                ),
               ),
             ),
           ),
-          if (cargando)
-            const Center(child: CircularProgressIndicator()),
         ],
       ),
     );
   }
 
-  String? _validarCampo(String? value) {
-    if (value == null || value.trim().isEmpty) {
-      return 'Este campo es requerido';
-    }
-    return null;
+  Widget _buildSeccionConTitulo(
+      {required String titulo, required List<Widget> children}) {
+    return Container(
+      margin: const EdgeInsets.symmetric(vertical: 10),
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
+      decoration: BoxDecoration(
+        color: Colors.white.withOpacity(0.95),
+        borderRadius: BorderRadius.circular(20),
+        boxShadow: [
+          BoxShadow(color: Colors.black12, blurRadius: 10, offset: Offset(0, 4)),
+        ],
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            titulo,
+            style: const TextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.w600,
+              color: Color(0xFF0E86E8),
+            ),
+          ),
+          const SizedBox(height: 10),
+          ...children.map((c) => Padding(
+                padding: const EdgeInsets.only(bottom: 14),
+                child: c,
+              )),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildDropdown(String hint, String? value, List<String> items, IconData icon,
+      void Function(String?) onChanged) {
+    return DropdownButtonFormField<String>(
+      decoration: InputDecoration(
+        hintText: hint,
+        hintStyle: const TextStyle(color: Colors.grey),
+        prefixIcon: Icon(icon, color: Colors.teal),
+        filled: true,
+        fillColor: Colors.white.withOpacity(0.9),
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(30),
+          borderSide: BorderSide.none,
+        ),
+      ),
+      value: value,
+      style: const TextStyle(color: Colors.black),
+      iconEnabledColor: Colors.teal,
+      dropdownColor: Colors.white,
+      items: items.map((e) => DropdownMenuItem(value: e, child: Text(e))).toList(),
+      onChanged: onChanged,
+      validator: (v) => v == null ? 'Seleccione $hint' : null,
+    );
+  }
+
+  Widget _buildFechaNacimiento() {
+    return Row(
+      children: [
+        const Icon(Icons.calendar_today, color: Colors.teal),
+        const SizedBox(width: 10),
+        Expanded(
+          child: Text(
+            fechaNacimientoMascota == null
+                ? 'Fecha de nacimiento'
+                : 'Fecha: ${fechaNacimientoMascota!.toLocal().toString().split(' ')[0]}',
+            style: const TextStyle(fontSize: 16, color: Colors.black),
+          ),
+        ),
+        TextButton(
+          onPressed: () async {
+            final f = await showDatePicker(
+              context: context,
+              initialDate: DateTime.now(),
+              firstDate: DateTime(2000),
+              lastDate: DateTime.now(),
+            );
+            if (f != null) setState(() => fechaNacimientoMascota = f);
+          },
+          child: const Text('Seleccionar'),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildSelectorImagen() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const Text('Foto de la mascota',
+            style: TextStyle(fontWeight: FontWeight.w500, color: Colors.black)),
+        const SizedBox(height: 10),
+        InkWell(
+          onTap: _seleccionarImagen,
+          borderRadius: BorderRadius.circular(12),
+          child: Container(
+            width: double.infinity,
+            height: 150,
+            decoration: BoxDecoration(
+              color: Colors.grey[200],
+              borderRadius: BorderRadius.circular(12),
+              border: Border.all(color: Colors.grey.shade400),
+            ),
+            child: imagenMascota != null
+                ? ClipRRect(
+                    borderRadius: BorderRadius.circular(12),
+                    child: Image.file(imagenMascota!, fit: BoxFit.cover),
+                  )
+                : const Center(
+                    child: Icon(Icons.camera_alt_outlined,
+                        size: 50, color: Colors.teal),
+                  ),
+          ),
+        ),
+      ],
+    );
   }
 }

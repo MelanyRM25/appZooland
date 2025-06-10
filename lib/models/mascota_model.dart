@@ -8,6 +8,7 @@ class Mascota {
   final DateTime fechaNacimiento;
   final String? imagen_url;
   final String idPropietario;
+  final String? qrData;
 
   Mascota({
     this.id,
@@ -19,6 +20,8 @@ class Mascota {
     required this.fechaNacimiento,
     this.imagen_url,
     required this.idPropietario,
+        this.qrData,
+
   });
 
   Mascota copyWith({
@@ -34,6 +37,7 @@ class Mascota {
       fechaNacimiento: fechaNacimiento,
       imagen_url: imagen_url ?? this.imagen_url,
       idPropietario: idPropietario,
+      qrData: qrData ?? this.qrData,
     );
   }
 
@@ -48,6 +52,7 @@ class Mascota {
       'fecha_nacimiento': fechaNacimiento.toIso8601String(),
       'imagen_url': imagen_url,
       'id_propietario': idPropietario,
+      'qr_data': qrData,
     };
   }
 
@@ -62,6 +67,7 @@ class Mascota {
       fechaNacimiento: DateTime.parse(map['fecha_nacimiento']),
       imagen_url: map['imagen_url'],
       idPropietario: map['id_propietario'] ?? '',
+      qrData: map['qr_data'],
     );
   }
 }

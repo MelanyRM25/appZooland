@@ -104,4 +104,5 @@ class UsuarioViewModel extends ChangeNotifier {
       notifyListeners();
     }
   }
+  
 }
