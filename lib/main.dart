@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:zooland/models/mascota_model.dart';
 import 'package:zooland/viewmodels/auth_viewmodel.dart';
+import 'package:zooland/viewmodels/datos_fisiologicos_viewmodel.dart';
 import 'package:zooland/viewmodels/mascota_viewmodel.dart';
 import 'package:zooland/viewmodels/propietario_viewmodel.dart';
 import 'package:zooland/viewmodels/usuario_viewmodel.dart';
@@ -23,6 +24,7 @@ void main() async {
         ChangeNotifierProvider(create: (_) => UsuarioViewModel()),
         ChangeNotifierProvider(create: (_) => PropietarioViewModel()),
         ChangeNotifierProvider(create: (_) => MascotaViewModel()),
+        ChangeNotifierProvider(create: (_) => DatosFisiologicosViewModel()),
       ],
       child: MyApp(),
     ),

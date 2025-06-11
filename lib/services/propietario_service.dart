@@ -26,4 +26,15 @@ class PropietarioService {
 
     return Propietario.fromMap(response);
   }
+Future<Propietario?> obtenerPorId(String id) async {
+  final response = await _client
+      .from('propietarios')
+      .select()
+      .eq('id_propietario', id)
+      .maybeSingle();
+
+  if (response == null) return null;
+  return Propietario.fromMap(response);
+}
+
 }

@@ -14,22 +14,26 @@ class PropietarioViewModel extends ChangeNotifier {
   String? _error;
   String? get error => _error;
 
-  // Buscar propietario por celular
-  Future<void> buscarPorCelular(String celular) async {
-    _isLoading = true;
-    _error = null;
-    notifyListeners();
+Future<void> obtenerPorId(String id) async {
+  _isLoading = true;
+  _error = null;
+  notifyListeners();
 
-    try {
-      final resultado = await _service.buscarPorCelular(celular);
-      _propietario = resultado;
-    } catch (e) {
-      _error = 'Error al buscar propietario: $e';
-    } finally {
-      _isLoading = false;
-      notifyListeners();
-    }
+  try {
+    final data = await _service.obtenerPorId(id);
+    print("🧾 Propietario obtenido: $data");
+    _propietario = data;
+  } catch (e) {
+      print("❌ Error al cargar propietario: $e");
+
+    _error = 'Error al cargar propietario: $e';
+  } finally {
+    _isLoading = false;
+    notifyListeners();
   }
+}
+
+
 
   // Registrar propietario y devolver ID (o null si falla)
   Future<String?> registrarPropietario({
@@ -65,4 +69,18 @@ class PropietarioViewModel extends ChangeNotifier {
       notifyListeners();
     }
   }
+
+  Future<Propietario?> obtenerPropietarioPorId(String id) async {
+  try {
+    final data = await _service.obtenerPorId(id);
+    _propietario = data;
+    notifyListeners();
+    return data;
+  } catch (e) {
+    _error = 'Error al cargar propietario: $e';
+    notifyListeners();
+    return null;
+  }
+}
+
 }

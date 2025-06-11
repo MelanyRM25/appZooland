@@ -38,8 +38,30 @@ class _RegistroPacienteState extends State<RegistroPaciente> {
   File? imagenMascota;
 
   final List<String> especies = ['Perro', 'Gato'];
-  final List<String> razasPerro = ['Labrador', 'Bulldog', 'Pastor Alemán'];
-  final List<String> razasGato = ['Siames', 'Persa', 'Maine Coon'];
+  final List<String> razasPerro = [
+  'Labrador',
+  'Bulldog',
+  'Pastor Alemán',
+  'Pug',
+  'Chihuahua',
+  'Golden Retriever',
+  'Boxer',
+  'Mestizo',
+  'Shih Tzu',
+  'Beagle',
+  'Dálmata',
+];
+final List<String> razasGato = [
+  'Siames',
+  'Persa',
+  'Maine Coon',
+  'Bengala',
+  'Sphynx',
+  'Exótico',
+  'Ragdoll',
+  'Mestizo',
+  'British Shorthair',
+];
   final List<String> sexos = ['Macho', 'Hembra'];
 
   @override
@@ -152,7 +174,10 @@ class _RegistroPacienteState extends State<RegistroPaciente> {
       body: Stack(
         children: [
           Fondo(
-            coloresDegradado: const [Color(0xFFE0F7FA), Color(0xFFB2EBF2)],
+            coloresDegradado: const [
+               Color.fromARGB(255, 73, 119, 219), // Teal oscuro
+    Color.fromARGB(255, 64, 220, 238), // Teal más claro
+            ],
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
           ),
@@ -199,14 +224,14 @@ class _RegistroPacienteState extends State<RegistroPaciente> {
                           validator: _validarRequerido,
                         ),
                         CampoTextoRedondeado(
-                          hintText: 'Celular',
+                          hintText: 'Número de celular',
                           icono: Icons.phone_outlined,
                           controller: celularPropController,
                           keyboardType: TextInputType.phone,
                           validator: _validarRequerido,
                         ),
                         CampoTextoRedondeado(
-                          hintText: 'Referencia numérica',
+                          hintText: 'Número de referencia',
                           icono: Icons.numbers,
                           controller: referenciaPropController,
                           keyboardType: TextInputType.number,
@@ -224,7 +249,7 @@ class _RegistroPacienteState extends State<RegistroPaciente> {
                           validator: _validarRequerido,
                         ),
                         _buildDropdown('Especie', especieSeleccionada, especies,
-                            Icons.category_outlined, (v) {
+                            Icons.pets, (v) {
                           setState(() {
                             especieSeleccionada = v;
                             razaSeleccionada = null;
@@ -235,7 +260,7 @@ class _RegistroPacienteState extends State<RegistroPaciente> {
                           setState(() => razaSeleccionada = v);
                         }),
                         _buildDropdown(
-                            'Sexo', sexoMascota, sexos, Icons.wc_outlined, (v) {
+                            'Sexo', sexoMascota, sexos, Icons.pets_rounded, (v) {
                           setState(() => sexoMascota = v);
                         }),
                         CampoTextoRedondeado(
@@ -253,10 +278,12 @@ class _RegistroPacienteState extends State<RegistroPaciente> {
                         ? const Center(child: CircularProgressIndicator())
                         : Center(
                             child: BotonWidget(
+                              height: h * 0.07,
+                              width: w * 0.6,
                               texto: 'Registrar Paciente',
                               coloresDegradado: const [
-                                Color(0xFF12AD9F),
-                                Color(0xFF0E86E8)
+                                Color.fromARGB(255, 237, 129, 41),
+                                Color.fromARGB(255, 227, 222, 74)
                               ],
                               onPressed: _registrarPaciente,
                             ),
