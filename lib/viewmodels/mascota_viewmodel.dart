@@ -8,6 +8,8 @@ import 'package:printing/printing.dart';
 import 'package:zooland/models/mascota_model.dart';
 import 'package:zooland/services/mascota_service.dart';
 import 'package:pdf/widgets.dart' as pw; // ✅ Esta es la correcta
+import 'package:device_info_plus/device_info_plus.dart'; // nuevo
+
 
 
 class MascotaViewModel extends ChangeNotifier {
@@ -23,31 +25,33 @@ class MascotaViewModel extends ChangeNotifier {
   String? get mascotaId => _mascotaId;
 
   /// Registrar mascota con imagen
-  Future<void> registrarMascotaConImagen({
-    required Mascota mascota,
-    required File imagen,
-  }) async {
-    _isLoading = true;
-    _error = null;
+Future<bool> registrarMascotaConImagen({
+  required Mascota mascota,
+  required File imagen,
+}) async {
+  _isLoading = true;
+  _error = null;
+  notifyListeners();
+
+  try {
+    final urlImagen = await _mascotaService.subirImagen(imagen, mascota.nombre);
+
+    final mascotaConImagen = mascota.copyWith(imagen_url: urlImagen);
+
+    // Insertar mascota con ID y QR generados automáticamente
+    final id = await _mascotaService.insertarMascota(mascotaConImagen);
+    _mascotaId = id;
+
+    return true;
+  } catch (e) {
+    _error = 'Error al registrar mascota: $e';
+    return false;
+  } finally {
+    _isLoading = false;
     notifyListeners();
-
-    try {
-      // Subir la imagen
-      final urlImagen = await _mascotaService.subirImagen(imagen, mascota.nombre);
-
-      // Crear nuevo objeto con URL de imagen
-      final mascotaConImagen = mascota.copyWith(imagen_url: urlImagen);
-
-      // Insertar mascota
-      final id = await _mascotaService.insertarMascota(mascotaConImagen);
-      _mascotaId = id;
-    } catch (e) {
-      _error = 'Error al registrar mascota: $e';
-    } finally {
-      _isLoading = false;
-      notifyListeners();
-    }
   }
+}
+
 
   void limpiarEstado() {
     _isLoading = false;
@@ -63,7 +67,8 @@ Future<void> cargarMascotas() async {
   _isLoading = true;
   notifyListeners();
   try {
-    _listaMascotas = await _mascotaService.obtenerMascotas();
+    _listaMascotas = await _mascotaService.obtenerMascotasConPropietario();
+    _error = null;
   } catch (e) {
     _error = 'Error al cargar mascotas: $e';
   } finally {
@@ -80,6 +85,20 @@ Future<Mascota?> obtenerMascotaPorId(String id) async {
     return null;
   }
 }
+Future<bool> asignarMascotaAPropietario({
+  required Mascota mascota,
+  required File imagen,
+  required String idPropietario,
+}) async {
+  // asignar el idPropietario a la mascota
+  final mascotaConPropietario = mascota.copyWith(idPropietario: idPropietario);
+
+  return await registrarMascotaConImagen(
+    mascota: mascotaConPropietario,
+    imagen: imagen,
+  );
+}
+
 // En MascotaViewModel
 Future<void> guardarQrEnBase(String mascotaId, String qrData) async {
   _isLoading = true;
@@ -101,44 +120,73 @@ bool _isSaving = false;
   bool get isSaving => _isSaving;
   bool get isPrinting => _isPrinting;
 
-  Future<void> guardarQRComoImagen(GlobalKey key, BuildContext context) async {
-    _isSaving = true;
-    notifyListeners();
+Future<void> guardarQRComoImagen(GlobalKey key, BuildContext context) async {
+  _isSaving = true;
+  notifyListeners();
 
-    try {
-      RenderRepaintBoundary boundary =
-          key.currentContext!.findRenderObject() as RenderRepaintBoundary;
-      if (boundary.debugNeedsPaint) {
-        await Future.delayed(const Duration(milliseconds: 300));
-        return guardarQRComoImagen(key, context);
-      }
+  try {
+    // Obtener el widget como imagen
+    RenderRepaintBoundary boundary =
+        key.currentContext!.findRenderObject() as RenderRepaintBoundary;
 
-      ui.Image image = await boundary.toImage(pixelRatio: 3.0);
-      ByteData? byteData = await image.toByteData(format: ui.ImageByteFormat.png);
-      Uint8List pngBytes = byteData!.buffer.asUint8List();
-
-      var status = await Permission.storage.request();
-      if (!status.isGranted) {
-        _showSnackBar(context, "Permiso de almacenamiento denegado");
-        return;
-      }
-
-      final directory = Directory('/storage/emulated/0/Pictures/Zooland');
-      if (!(await directory.exists())) await directory.create(recursive: true);
-
-      final filePath = '${directory.path}/qr_${DateTime.now().millisecondsSinceEpoch}.png';
-      final file = File(filePath);
-      await file.writeAsBytes(pngBytes);
-
-      _showSnackBar(context, "Imagen guardada en: $filePath");
-    } catch (e) {
-      _showSnackBar(context, "Error al guardar la imagen");
-      print("❌ Error al guardar: $e");
-    } finally {
-      _isSaving = false;
-      notifyListeners();
+    if (boundary.debugNeedsPaint) {
+      await Future.delayed(const Duration(milliseconds: 300));
+      return guardarQRComoImagen(key, context);
     }
+
+    ui.Image image = await boundary.toImage(pixelRatio: 3.0);
+    ByteData? byteData = await image.toByteData(format: ui.ImageByteFormat.png);
+    Uint8List pngBytes = byteData!.buffer.asUint8List();
+
+    // Verificar y pedir permisos
+    final permiso = await _pedirPermisoAlmacenamiento();
+    if (!permiso) {
+      _showSnackBar(context, "Permiso de almacenamiento denegado");
+      return;
+    }
+
+    // Ruta fija para guardar (solo en Android)
+    final directorio = Directory('/storage/emulated/0/Pictures/Zooland');
+    if (!(await directorio.exists())) {
+      await directorio.create(recursive: true);
+    }
+
+    final filePath = '${directorio.path}/qr_${DateTime.now().millisecondsSinceEpoch}.png';
+    final file = File(filePath);
+    await file.writeAsBytes(pngBytes);
+
+    _showSnackBar(context, "Imagen guardada correctamente en: $filePath");
+  } catch (e) {
+    _showSnackBar(context, "Error al guardar la imagen");
+    print("❌ Error al guardar imagen: $e");
+  } finally {
+    _isSaving = false;
+    notifyListeners();
   }
+}
+Future<bool> _pedirPermisoAlmacenamiento() async {
+  if (!Platform.isAndroid) return true;
+
+  final androidInfo = await DeviceInfoPlugin().androidInfo;
+  final sdkInt = androidInfo.version.sdkInt;
+
+  if (sdkInt >= 33) {
+    // Android 13 o superior → permisos multimedia
+    final status = await Permission.photos.request();
+    print("🔐 Permiso READ_MEDIA_IMAGES: $status");
+    if (status.isGranted) return true;
+    if (status.isPermanentlyDenied) openAppSettings();
+    return false;
+  } else {
+    // Android 12 o menor
+    final status = await Permission.storage.request();
+    print("🔐 Permiso storage: $status");
+    if (status.isGranted) return true;
+    if (status.isPermanentlyDenied) openAppSettings();
+    return false;
+  }
+}
+
 
   Future<void> imprimirQRComoPDF(GlobalKey key, BuildContext context) async {
     _isPrinting = true;
@@ -175,6 +223,22 @@ bool _isSaving = false;
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(message)));
     }
   }
+Future<List<Mascota>> obtenerMascotasDelPropietario(String idMascota) async {
+  try {
+    final mascota = await _mascotaService.obtenerMascotaPorId(idMascota);
+    if (mascota == null) return [];
+
+    final idPropietario = mascota.idPropietario;
+    if (idPropietario == null) return [];
+
+    final mascotas = await _mascotaService.obtenerMascotasPorPropietario(idPropietario);
+    return mascotas;
+  } catch (e) {
+    _error = 'Error al obtener mascotas del propietario: $e';
+    notifyListeners();
+    return [];
+  }
+}
 
 
 

@@ -15,6 +15,7 @@ class PropietarioService {
     if (response == null) return null;
     return Propietario.fromMap(response);
   }
+  
 
   // Registrar propietario
   Future<Propietario> registrar(Propietario propietario) async {
@@ -35,6 +36,16 @@ Future<Propietario?> obtenerPorId(String id) async {
 
   if (response == null) return null;
   return Propietario.fromMap(response);
+}
+Future<void> eliminarPropietario(String idPropietario) async {
+  await _client
+      .from('propietarios')
+      .delete()
+      .eq('id_propietario', idPropietario);
+}
+Future<List<Propietario>> obtenerTodos() async {
+  final response = await _client.from('propietarios').select();
+  return (response as List).map((e) => Propietario.fromMap(e)).toList();
 }
 
 }

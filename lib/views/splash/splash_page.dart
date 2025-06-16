@@ -46,9 +46,9 @@ class _SplashScreenState extends State<SplashScreen>
     final session = Supabase.instance.client.auth.currentSession;
 
     if (session != null) {
-      Navigator.pushReplacementNamed(context, AppRutas.admin);
+      Navigator.pushReplacementNamed(context, AppRutas.menu);
     } else {
-      Navigator.pushReplacementNamed(context, AppRutas.welcome);
+      Navigator.pushReplacementNamed(context, AppRutas.tipo_usuario);
     }
   }
 

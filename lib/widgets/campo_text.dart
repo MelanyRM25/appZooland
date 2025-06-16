@@ -8,6 +8,7 @@ class CampoTextoRedondeado extends StatelessWidget {
   final TextEditingController? controller;
   final IconButton? suffixIcon;
   final String? Function(String?)? validator;
+  final bool enabled;
 
   const CampoTextoRedondeado({
     Key? key,
@@ -18,6 +19,7 @@ class CampoTextoRedondeado extends StatelessWidget {
     this.controller,
     this.suffixIcon,
     this.validator,
+    this.enabled = true,
   }) : super(key: key);
 
   @override

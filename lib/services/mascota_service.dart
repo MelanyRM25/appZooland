@@ -1,22 +1,31 @@
 import 'dart:io';
 
 import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:uuid/uuid.dart';
 import 'package:zooland/models/mascota_model.dart';
 
 class MascotaService {
   final SupabaseClient _client = Supabase.instance.client;
 
   /// Inserta una mascota y devuelve su ID generado.
-  Future<String> insertarMascota(Mascota mascota) async {
-    
-    final result = await _client
-        .from('mascotas')
-        .insert(mascota.toMap())
-        .select('id')
-        .single();
+ /// Inserta una mascota con ID y qrData generado automáticamente
+Future<String> insertarMascota(Mascota mascota) async {
+  final uuid = const Uuid().v4();
 
-    return result['id'].toString();
-  }
+  final mascotaFinal = mascota.copyWith(
+    id: uuid,
+    qrData: 'mascota/$uuid', // Puedes cambiar esto por una URL completa si deseas
+  );
+
+  final result = await _client
+      .from('mascotas')
+      .insert(mascotaFinal.toMap())
+      .select('id')
+      .single();
+
+  return result['id'].toString();
+}
+
 
   /// Sube una imagen al bucket 'mascotas' y devuelve la URL pública.
   Future<String> subirImagen(File archivo, String nombreArchivo) async {
@@ -56,6 +65,24 @@ class MascotaService {
       throw Exception('Error al obtener mascotas: $e');
     }
   }
+  Future<List<Mascota>> obtenerMascotasConPropietario() async {
+  final response = await _client
+      .from('mascotas')
+      .select('*, propietarios(nombre,apellido_paterno)');
+
+  final mascotas = (response as List).map((mapa) {
+    final mascotaMap = Map<String, dynamic>.from(mapa);
+    final propietario = mapa['propietarios'];
+
+     mascotaMap['nombre_propietario'] = propietario?['nombre'] ?? '';
+    mascotaMap['apellido_propietario'] = propietario?['apellido_paterno'] ?? '';
+
+    return Mascota.fromMap(mascotaMap);
+  }).toList();
+
+  return mascotas;
+}
+
   //Obtener mascota por ID 
   Future<Mascota?> obtenerMascotaPorId(String id) async {
   try {
@@ -84,6 +111,14 @@ Future<void> actualizarQrData(String idMascota, String qrData) async {
   if (response == null || response['qr_data'] != qrData) {
     throw Exception('No se actualizó qr_data correctamente');
   }
+}
+Future<List<Mascota>> obtenerMascotasPorPropietario(String idPropietario) async {
+  final response = await _client
+      .from('mascotas')
+      .select()
+      .eq('id_propietario', idPropietario);
+
+  return (response as List).map((e) => Mascota.fromMap(e)).toList();
 }
 
 

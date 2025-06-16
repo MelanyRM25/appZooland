@@ -20,17 +20,16 @@ class RegistroPaciente extends StatefulWidget {
 class _RegistroPacienteState extends State<RegistroPaciente> {
   final _formKey = GlobalKey<FormState>();
 
-  // Propietario
+  // Controladores
   final nombrePropController = TextEditingController();
   final apellidoPatPropController = TextEditingController();
   final apellidoMatPropController = TextEditingController();
   final direccionPropController = TextEditingController();
   final celularPropController = TextEditingController();
   final referenciaPropController = TextEditingController();
-
-  // Mascota
   final nombreMascotaController = TextEditingController();
   final colorController = TextEditingController();
+
   String? especieSeleccionada;
   String? razaSeleccionada;
   String? sexoMascota;
@@ -38,30 +37,26 @@ class _RegistroPacienteState extends State<RegistroPaciente> {
   File? imagenMascota;
 
   final List<String> especies = ['Perro', 'Gato'];
-  final List<String> razasPerro = [
-  'Labrador',
-  'Bulldog',
-  'Pastor Alemán',
-  'Pug',
-  'Chihuahua',
-  'Golden Retriever',
-  'Boxer',
-  'Mestizo',
-  'Shih Tzu',
-  'Beagle',
-  'Dálmata',
-];
-final List<String> razasGato = [
-  'Siames',
-  'Persa',
-  'Maine Coon',
-  'Bengala',
-  'Sphynx',
-  'Exótico',
-  'Ragdoll',
-  'Mestizo',
-  'British Shorthair',
-];
+  final List<String> razasPerro = ['Labrador',
+    'Bulldog',
+    'Pastor Alemán',
+    'Pug',
+    'Chihuahua',
+    'Golden Retriever',
+    'Boxer',
+    'Mestizo',
+    'Shih Tzu',
+    'Beagle',
+    'Dálmata',];
+  final List<String> razasGato = [ 'Siames',
+    'Persa',
+    'Maine Coon',
+    'Bengala',
+    'Sphynx',
+    'Exótico',
+    'Ragdoll',
+    'Mestizo',
+    'British Shorthair',];
   final List<String> sexos = ['Macho', 'Hembra'];
 
   @override
@@ -152,14 +147,7 @@ final List<String> razasGato = [
       const SnackBar(content: Text('Paciente registrado con éxito')),
     );
 
-    _formKey.currentState!.reset();
-    setState(() {
-      especieSeleccionada = null;
-      razaSeleccionada = null;
-      sexoMascota = null;
-      fechaNacimientoMascota = null;
-      imagenMascota = null;
-    });
+    Navigator.pushReplacementNamed(context, '/menu');
   }
 
   @override
@@ -169,138 +157,143 @@ final List<String> razasGato = [
     final h = MediaQuery.of(context).size.height;
     final w = MediaQuery.of(context).size.width;
 
-    return Scaffold(
-      extendBodyBehindAppBar: true,
-      body: Stack(
-        children: [
-          Fondo(
-            coloresDegradado: const [
-               Color.fromARGB(255, 73, 119, 219), // Teal oscuro
-    Color.fromARGB(255, 64, 220, 238), // Teal más claro
-            ],
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
+    return WillPopScope(
+      onWillPop: () async {
+        Navigator.pushReplacementNamed(context, '/menu');
+        return false;
+      },
+      child: Scaffold(
+        appBar: AppBar(
+          title: const Text('Registrar Paciente', style: TextStyle(color: Colors.white)),
+          backgroundColor: Colors.blue,
+          leading: IconButton(
+            icon: const Icon(Icons.arrow_back, color: Colors.white),
+            onPressed: () {
+              Navigator.pushReplacementNamed(context, '/menu');
+            },
           ),
-          SafeArea(
-            child: SingleChildScrollView(
-              padding: EdgeInsets.symmetric(horizontal: w * 0.06, vertical: h * 0.02),
-              child: Form(
-                key: _formKey,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    BotonIcono(
-                      onPressed: () => Navigator.pop(context),
-                      icon: Icons.arrow_back,
-                      iconColor: Colors.teal,
-                      iconSize: 30,
-                    ),
-                    SizedBox(height: h * 0.015),
-                    _buildSeccionConTitulo(
-                      titulo: 'Datos del Propietario',
-                      children: [
-                        CampoTextoRedondeado(
-                          hintText: 'Nombre',
-                          icono: Icons.person_outline,
-                          controller: nombrePropController,
-                          validator: _validarRequerido,
-                        ),
-                        CampoTextoRedondeado(
-                          hintText: 'Apellido paterno',
-                          icono: Icons.person_outline,
-                          controller: apellidoPatPropController,
-                          validator: _validarRequerido,
-                        ),
-                        CampoTextoRedondeado(
-                          hintText: 'Apellido materno',
-                          icono: Icons.person_outline,
-                          controller: apellidoMatPropController,
-                          validator: _validarRequerido,
-                        ),
-                        CampoTextoRedondeado(
-                          hintText: 'Dirección',
-                          icono: Icons.home_outlined,
-                          controller: direccionPropController,
-                          validator: _validarRequerido,
-                        ),
-                        CampoTextoRedondeado(
-                          hintText: 'Número de celular',
-                          icono: Icons.phone_outlined,
-                          controller: celularPropController,
-                          keyboardType: TextInputType.phone,
-                          validator: _validarRequerido,
-                        ),
-                        CampoTextoRedondeado(
-                          hintText: 'Número de referencia',
-                          icono: Icons.numbers,
-                          controller: referenciaPropController,
-                          keyboardType: TextInputType.number,
-                          validator: _validarRequerido,
-                        ),
-                      ],
-                    ),
-                    _buildSeccionConTitulo(
-                      titulo: 'Datos de la Mascota',
-                      children: [
-                        CampoTextoRedondeado(
-                          hintText: 'Nombre mascota',
-                          icono: Icons.pets_outlined,
-                          controller: nombreMascotaController,
-                          validator: _validarRequerido,
-                        ),
-                        _buildDropdown('Especie', especieSeleccionada, especies,
-                            Icons.pets, (v) {
-                          setState(() {
-                            especieSeleccionada = v;
-                            razaSeleccionada = null;
-                          });
-                        }),
-                        _buildDropdown('Raza', razaSeleccionada, getRazasPorEspecie(),
-                            Icons.pets, (v) {
-                          setState(() => razaSeleccionada = v);
-                        }),
-                        _buildDropdown(
-                            'Sexo', sexoMascota, sexos, Icons.pets_rounded, (v) {
-                          setState(() => sexoMascota = v);
-                        }),
-                        CampoTextoRedondeado(
-                          hintText: 'Color',
-                          icono: Icons.format_paint_outlined,
-                          controller: colorController,
-                          validator: _validarRequerido,
-                        ),
-                        _buildFechaNacimiento(),
-                        _buildSelectorImagen(),
-                      ],
-                    ),
-                    SizedBox(height: h * 0.025),
-                    cargando
-                        ? const Center(child: CircularProgressIndicator())
-                        : Center(
-                            child: BotonWidget(
-                              height: h * 0.07,
-                              width: w * 0.6,
-                              texto: 'Registrar Paciente',
-                              coloresDegradado: const [
-                                Color.fromARGB(255, 237, 129, 41),
-                                Color.fromARGB(255, 227, 222, 74)
-                              ],
-                              onPressed: _registrarPaciente,
-                            ),
+        ),
+        extendBodyBehindAppBar: true,
+        body: Stack(
+          children: [
+            Fondo(
+              coloresDegradado: const [
+                Color.fromARGB(255, 73, 119, 219),
+                Color.fromARGB(255, 64, 220, 238),
+              ],
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+            ),
+            SafeArea(
+              child: SingleChildScrollView(
+                padding: EdgeInsets.symmetric(horizontal: w * 0.06, vertical: h * 0.02),
+                child: Form(
+                  key: _formKey,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      _buildSeccionConTitulo(
+                        titulo: 'Datos del Propietario',
+                        children: [
+                          CampoTextoRedondeado(
+                            hintText: 'Nombre',
+                            icono: Icons.person_outline,
+                            controller: nombrePropController,
+                            validator: _validarRequerido,
                           ),
-                    SizedBox(height: h * 0.04),
-                  ],
+                          CampoTextoRedondeado(
+                            hintText: 'Apellido paterno',
+                            icono: Icons.person_outline,
+                            controller: apellidoPatPropController,
+                            validator: _validarRequerido,
+                          ),
+                          CampoTextoRedondeado(
+                            hintText: 'Apellido materno',
+                            icono: Icons.person_outline,
+                            controller: apellidoMatPropController,
+                            validator: _validarRequerido,
+                          ),
+                          CampoTextoRedondeado(
+                            hintText: 'Dirección',
+                            icono: Icons.home_outlined,
+                            controller: direccionPropController,
+                            validator: _validarRequerido,
+                          ),
+                          CampoTextoRedondeado(
+                            hintText: 'Número de celular',
+                            icono: Icons.phone_outlined,
+                            controller: celularPropController,
+                            keyboardType: TextInputType.phone,
+                            validator: _validarRequerido,
+                          ),
+                          CampoTextoRedondeado(
+                            hintText: 'Número de referencia',
+                            icono: Icons.numbers,
+                            controller: referenciaPropController,
+                            keyboardType: TextInputType.number,
+                            validator: _validarRequerido,
+                          ),
+                        ],
+                      ),
+                      _buildSeccionConTitulo(
+                        titulo: 'Datos de la Mascota',
+                        children: [
+                          CampoTextoRedondeado(
+                            hintText: 'Nombre mascota',
+                            icono: Icons.pets_outlined,
+                            controller: nombreMascotaController,
+                            validator: _validarRequerido,
+                          ),
+                          _buildDropdown('Especie', especieSeleccionada, especies, Icons.pets, (v) {
+                            setState(() {
+                              especieSeleccionada = v;
+                              razaSeleccionada = null;
+                            });
+                          }),
+                          _buildDropdown('Raza', razaSeleccionada, getRazasPorEspecie(), Icons.pets, (v) {
+                            setState(() => razaSeleccionada = v);
+                          }),
+                          _buildDropdown('Sexo', sexoMascota, sexos, Icons.pets_rounded, (v) {
+                            setState(() => sexoMascota = v);
+                          }),
+                          CampoTextoRedondeado(
+                            hintText: 'Color',
+                            icono: Icons.format_paint_outlined,
+                            controller: colorController,
+                            validator: _validarRequerido,
+                          ),
+                          _buildFechaNacimiento(),
+                          _buildSelectorImagen(),
+                        ],
+                      ),
+                      SizedBox(height: h * 0.025),
+                      cargando
+                          ? const Center(child: CircularProgressIndicator())
+                          : Center(
+                              child: BotonWidget(
+                                height: h * 0.07,
+                                width: w * 0.6,
+                                texto: 'Registrar Paciente',
+                                coloresDegradado: const [
+                                  Color.fromARGB(255, 237, 129, 41),
+                                  Color.fromARGB(255, 227, 222, 74),
+                                ],
+                                onPressed: _registrarPaciente,
+                              ),
+                            ),
+                      SizedBox(height: h * 0.04),
+                    ],
+                  ),
                 ),
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
 
-  Widget _buildSeccionConTitulo(
-      {required String titulo, required List<Widget> children}) {
+  Widget _buildSeccionConTitulo({required String titulo, required List<Widget> children}) {
     return Container(
       margin: const EdgeInsets.symmetric(vertical: 10),
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
@@ -337,7 +330,6 @@ final List<String> razasGato = [
     return DropdownButtonFormField<String>(
       decoration: InputDecoration(
         hintText: hint,
-        hintStyle: const TextStyle(color: Colors.grey),
         prefixIcon: Icon(icon, color: Colors.teal),
         filled: true,
         fillColor: Colors.white.withOpacity(0.9),
@@ -409,8 +401,7 @@ final List<String> razasGato = [
                     child: Image.file(imagenMascota!, fit: BoxFit.cover),
                   )
                 : const Center(
-                    child: Icon(Icons.camera_alt_outlined,
-                        size: 50, color: Colors.teal),
+                    child: Icon(Icons.camera_alt_outlined, size: 50, color: Colors.teal),
                   ),
           ),
         ),

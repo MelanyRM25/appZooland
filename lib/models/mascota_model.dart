@@ -9,6 +9,9 @@ class Mascota {
   final String? imagen_url;
   final String idPropietario;
   final String? qrData;
+  final String? nombrePropietario;
+    final String? apellidoPropietario; // 👈 NUEVO CAMPO
+
 
   Mascota({
     this.id,
@@ -20,24 +23,36 @@ class Mascota {
     required this.fechaNacimiento,
     this.imagen_url,
     required this.idPropietario,
-        this.qrData,
-
+    this.qrData,
+    this.nombrePropietario, 
+    this.apellidoPropietario,
   });
 
   Mascota copyWith({
+    String? id,
+    String? nombre,
+    String? especie,
+    String? raza,
+    String? color,
+    String? sexo,
+    DateTime? fechaNacimiento,
     String? imagen_url,
+    String? idPropietario,
+    String? qrData,
   }) {
     return Mascota(
-      id: id,
-      nombre: nombre,
-      especie: especie,
-      raza: raza,
-      color: color,
-      sexo: sexo,
-      fechaNacimiento: fechaNacimiento,
+      id: id ?? this.id,
+      nombre: nombre ?? this.nombre,
+      especie: especie ?? this.especie,
+      raza: raza ?? this.raza,
+      color: color ?? this.color,
+      sexo: sexo ?? this.sexo,
+      fechaNacimiento: fechaNacimiento ?? this.fechaNacimiento,
       imagen_url: imagen_url ?? this.imagen_url,
-      idPropietario: idPropietario,
+      idPropietario: idPropietario ?? this.idPropietario,
       qrData: qrData ?? this.qrData,
+            nombrePropietario: nombrePropietario,
+      apellidoPropietario: apellidoPropietario,
     );
   }
 
@@ -68,6 +83,9 @@ class Mascota {
       imagen_url: map['imagen_url'],
       idPropietario: map['id_propietario'] ?? '',
       qrData: map['qr_data'],
+      nombrePropietario:
+          map['nombre_propietario'], 
+      apellidoPropietario: map['apellido_propietario'],
     );
   }
 }

@@ -13,6 +13,8 @@ class PropietarioViewModel extends ChangeNotifier {
 
   String? _error;
   String? get error => _error;
+List<Propietario> _propietarios = [];
+List<Propietario> get propietarios => _propietarios;
 
 Future<void> obtenerPorId(String id) async {
   _isLoading = true;
@@ -82,5 +84,25 @@ Future<void> obtenerPorId(String id) async {
     return null;
   }
 }
+Future<void> eliminarPropietarioPorId(String id) async {
+  try {
+    await _service.eliminarPropietario(id);
+  } catch (e) {
+    print('❌ Error al eliminar propietario: $e');
+  }
+}
+Future<void> cargarPropietarios() async {
+  _isLoading = true;
+  notifyListeners();
 
+  try {
+    _propietarios = await _service.obtenerTodos();
+    _error = null;
+  } catch (e) {
+    _error = 'Error al cargar propietarios: $e';
+  } finally {
+    _isLoading = false;
+    notifyListeners();
+  }
+}
 }

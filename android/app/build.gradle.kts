@@ -1,7 +1,7 @@
 plugins {
     id("com.android.application")
     id("kotlin-android")
-    // The Flutter Gradle Plugin must be applied after the Android and Kotlin Gradle plugins.
+    // El plugin de Flutter debe ir al final
     id("dev.flutter.flutter-gradle-plugin")
 }
 
@@ -20,21 +20,19 @@ android {
     }
 
     defaultConfig {
-        // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
         applicationId = "com.example.zooland"
-        // You can update the following values to match your application needs.
-        // For more information, see: https://flutter.dev/to/review-gradle-config.
-        minSdk = 24   //Android 7.0. Nougat
-        targetSdk = 33   //Android 13.0. Tiramisu
+        minSdk = 24 // Android 7.0
+        targetSdk = 34 // 🔧 Cambiado de 33 a 34
         versionCode = 1
         versionName = "1.0.0"
     }
 
     buildTypes {
         release {
-            // TODO: Add your own signing config for the release build.
-            // Signing with the debug keys for now, so `flutter run --release` works.
             signingConfig = signingConfigs.getByName("debug")
+            // ⚠️ Si vas a publicar el APK, usa aquí tu keystore de release
+            // minifyEnabled = true
+            // proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
         }
     }
 }

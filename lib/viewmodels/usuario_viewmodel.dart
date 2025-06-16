@@ -33,16 +33,16 @@ class UsuarioViewModel extends ChangeNotifier {
     }
   }
  Future<void> cerrarSesion(BuildContext context) async {
-    await _service.cerrarSesion();
+  await _service.cerrarSesion();
 
-    // Redirige al login y elimina historial
+  // Navega a la página tipo_usuario eliminando historial para que no pueda regresar atrás
   Navigator.pushNamedAndRemoveUntil(
-  context,
-  AppRutas.login,
-  (Route<dynamic> route) => false, // elimina todas las rutas anteriores
-);
+    context,
+    '/tipo_usuario',
+    (Route<dynamic> route) => false,
+  );
+}
 
-  }
   /// Crea un nuevo usuario
   Future<void> createUsuario(UserModel usuario) async {
     _cargando = true;

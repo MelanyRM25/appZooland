@@ -56,7 +56,7 @@ class _LoginPageState extends State<LoginPage> {
               child: EncabezadoCircular(
                 width: screenWidth * 0.8,
                 height: screenWidth * 0.8,
-                gradientColors: [
+                gradientColors: const [
                   Color.fromARGB(255, 255, 255, 255),
                   Color.fromARGB(255, 255, 255, 255),
                 ],
@@ -81,7 +81,11 @@ class _LoginPageState extends State<LoginPage> {
               left: screenWidth * 0.02,
               child: BotonIcono(
                 onPressed: () {
-                  Navigator.pop(context);
+                  Navigator.pushNamedAndRemoveUntil(
+                    context,
+                    AppRutas.welcome,
+                    (route) => false,
+                  );
                 },
                 icon: Icons.arrow_back,
                 iconColor: Colors.white,
@@ -115,12 +119,12 @@ class _LoginPageState extends State<LoginPage> {
                 ),
               ),
             ),
-             Positioned(
-              top: screenHeight * 0.02,  // Ajusta la posición vertical
-              left: screenWidth * 0.20,  // Ajusta la posición horizontal
+            Positioned(
+              top: screenHeight * 0.02, // Ajusta la posición vertical
+              left: screenWidth * 0.20, // Ajusta la posición horizontal
               child: Lottie.asset(
                 'assets/animations/pet2.json', // Reemplaza con tu archivo Lottie
-                width: screenWidth * 0.6,  // Ajusta el tamaño
+                width: screenWidth * 0.6, // Ajusta el tamaño
                 height: screenHeight * 0.6, // Ajusta el tamaño
                 fit: BoxFit.contain,
               ),
@@ -160,87 +164,87 @@ class _LoginPageState extends State<LoginPage> {
                           SizedBox(height: screenHeight * 0.05),
                           authViewModel.cargando
                               ? const CircularProgressIndicator(
-                                valueColor: AlwaysStoppedAnimation(Colors.teal),
-                              )
+                                  valueColor:
+                                      AlwaysStoppedAnimation(Colors.teal),
+                                )
                               : BotonWidget(
-                                texto: 'Iniciar Sesion',
-                                coloresDegradado: [
-                                  Color.fromARGB(255, 18, 173, 162),
-                                  Color.fromARGB(255, 14, 134, 232),
-                                ],
-                                width: 160,
-                                textStyle: const TextStyle(
-                                  color: Color.fromARGB(255, 255, 255, 255),
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.w600,
-                                  fontFamily: 'RobotoMono',
-                                ),
-                                onPressed: () async {
-                                  final email = emailController.text.trim();
-                                  final password =
-                                      passwordController.text.trim();
+                                  texto: 'Iniciar Sesion',
+                                  coloresDegradado: const [
+                                    Color.fromARGB(255, 18, 173, 162),
+                                    Color.fromARGB(255, 14, 134, 232),
+                                  ],
+                                  width: 160,
+                                  textStyle: const TextStyle(
+                                    color: Color.fromARGB(255, 255, 255, 255),
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.w600,
+                                    fontFamily: 'RobotoMono',
+                                  ),
+                                  onPressed: () async {
+                                    final email = emailController.text.trim();
+                                    final password =
+                                        passwordController.text.trim();
 
-                                  if ([email, password].any((s) => s.isEmpty)) {
-                                    ScaffoldMessenger.of(context).showSnackBar(
-                                      const SnackBar(
-                                        content: Text(
-                                          'Completa todos los campos obligatorios',
-                                        ),
-                                      ),
-                                    );
-                                    return;
-                                  }
-                                  //manejando el viewmodel
-                                  try {
-                                    await authViewModel.iniciarSesion(
-                                      email,
-                                      password,
-                                    );
-
-                                    ScaffoldMessenger.of(context).showSnackBar(
-                                      const SnackBar(
-                                        content: Text(
-                                          'Inicio de sesión exitoso',
-                                        ),
-                                      ),
-                                    );
-                                    // Obtener el rol del usuario
-                                    final rol = authViewModel.usuario?.idRol;
-
-                                    if (rol == 1) {
-                                      Navigator.pushReplacementNamed(
-                                        context,
-                                        AppRutas.admin,
-                                      );
-                                    } else if (rol == 2) {
-                                      Navigator.pushReplacementNamed(
-                                        context,
-                                        AppRutas.veterinario,
-                                      );
-                                    } else if (rol == 3) {
-                                      Navigator.pushReplacementNamed(
-                                        context,
-                                        AppRutas.recepcionista,
-                                      );
-                                    } else {
-                                      // En caso de rol desconocido
-                                      ScaffoldMessenger.of(
-                                        context,
-                                      ).showSnackBar(
+                                    if ([email, password].any((s) => s.isEmpty)) {
+                                      ScaffoldMessenger.of(context)
+                                          .showSnackBar(
                                         const SnackBar(
                                           content: Text(
-                                            'Rol no reconocido. Contacta al administrador.',
+                                            'Completa todos los campos obligatorios',
                                           ),
                                         ),
                                       );
+                                      return;
                                     }
-                                  } catch (e) {
-                                    ScaffoldMessenger.of(context).showSnackBar(
-                                      SnackBar(content: Text(e.toString())),
-                                    );
-                                  }
-                                },
-                              ),
+                                    try {
+                                      await authViewModel.iniciarSesion(
+                                        email,
+                                        password,
+                                      );
+
+                                      ScaffoldMessenger.of(context)
+                                          .showSnackBar(
+                                        const SnackBar(
+                                          content: Text(
+                                            'Inicio de sesión exitoso',
+                                          ),
+                                        ),
+                                      );
+
+                                      final rol = authViewModel.usuario?.idRol;
+                                      String ruta = '';
+
+                                      if (rol == 1) {
+                                        ruta = AppRutas.menu;
+                                      } else if (rol == 2) {
+                                        ruta = AppRutas.veterinario;
+                                      } else if (rol == 3) {
+                                        ruta = AppRutas.recepcionista;
+                                      } else {
+                                        ScaffoldMessenger.of(context)
+                                            .showSnackBar(
+                                          const SnackBar(
+                                            content: Text(
+                                              'Rol no reconocido. Contacta al administrador.',
+                                            ),
+                                          ),
+                                        );
+                                        return;
+                                      }
+
+                                      Navigator.pushNamedAndRemoveUntil(
+                                        context,
+                                        ruta,
+                                        (route) => false,
+                                      );
+                                    } catch (e) {
+                                      ScaffoldMessenger.of(context)
+                                          .showSnackBar(
+                                        SnackBar(content: Text(e.toString())),
+                                      );
+                                    }
+                                  },
+                                ),
                           SizedBox(height: screenHeight * 0.05),
                           TextoLink(
                             textoPrincipal: "¿No tienes cuenta? ",

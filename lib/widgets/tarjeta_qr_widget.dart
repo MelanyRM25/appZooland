@@ -76,7 +76,9 @@ class TarjetaQRWidget extends StatelessWidget {
                       )
                     : const Icon(Icons.download),
                 label: Text(qrViewModel.isSaving ? "Guardando..." : "Guardar"),
+                
               ),
+              
               ElevatedButton.icon(
                 onPressed: qrViewModel.isPrinting
                     ? null
@@ -96,4 +98,5 @@ class TarjetaQRWidget extends StatelessWidget {
       ),
     );
   }
+  
 }

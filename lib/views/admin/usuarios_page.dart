@@ -12,14 +12,29 @@ class UsuariosPage extends StatefulWidget {
 }
 
 class _UsuariosPageState extends State<UsuariosPage> {
+  TextEditingController _searchController = TextEditingController();
+  String _filtro = '';
+
   @override
   void initState() {
     super.initState();
     final viewModel = Provider.of<UsuarioViewModel>(context, listen: false);
     viewModel.readUsuarios();
+
+    _searchController.addListener(() {
+      setState(() {
+        _filtro = _searchController.text.toLowerCase();
+      });
+    });
   }
 
-  // 🧩 Diálogo de confirmación
+  @override
+  void dispose() {
+    _searchController.dispose();
+    super.dispose();
+  }
+
+  // 🧩 Diálogo de confirmación para eliminar usuario
   void mostrarDialogoEliminarUsuario(BuildContext context, String usuarioId) {
     showDialog(
       context: context,
@@ -59,93 +74,119 @@ class _UsuariosPageState extends State<UsuariosPage> {
   Widget build(BuildContext context) {
     final usuarioViewModel = Provider.of<UsuarioViewModel>(context);
 
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text(
-          'Gestión de Usuarios',
-          style: TextStyle(color: Colors.white),
-        ),
-                centerTitle: true,
+    // Filtrar usuarios por nombre o rol
+    final usuariosFiltrados = usuarioViewModel.usuarios.where((usuario) {
+      final nombreCompleto = '${usuario.nombreUsuario} ${usuario.apellidoPaterno} ${usuario.apellidoMaterno}'.toLowerCase();
+      final rol = (usuario.nombreRol ?? '').toLowerCase();
+      return nombreCompleto.contains(_filtro) || rol.contains(_filtro);
+    }).toList();
 
-        backgroundColor: const Color(
-          0xFF04A5D5
-        ),
-        leading: Padding(
-          padding: const EdgeInsets.only(left: 16.0, top: 5.0),
-          child: BotonIcono(
+    return WillPopScope(
+      onWillPop: () async {
+        Navigator.pushReplacementNamed(context, '/menu');
+        return false;
+      },
+      child: Scaffold(
+        appBar: AppBar(
+          title: const Text('Gestión de Usuarios', style: TextStyle(color: Colors.white)),
+          backgroundColor: Colors.teal,
+          leading: IconButton(
+            icon: const Icon(Icons.arrow_back, color: Colors.white),
             onPressed: () {
-              Navigator.pop(context);
+              Navigator.pushReplacementNamed(context, '/menu');
             },
-            icon: Icons.arrow_back,
-            iconColor: Colors.white,
-            iconSize: 26.0,
+          ),
+          bottom: PreferredSize(
+            preferredSize: const Size.fromHeight(60),
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: TextField(
+                controller: _searchController,
+                style: const TextStyle(color: Colors.white),
+                decoration: InputDecoration(
+                  hintText: 'Buscar por nombre o rol...',
+                  hintStyle: const TextStyle(color: Colors.white70),
+                  prefixIcon: const Icon(Icons.search, color: Colors.white70),
+                  filled: true,
+                  fillColor: Colors.teal,
+                  contentPadding: const EdgeInsets.symmetric(horizontal: 16),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(30),
+                    borderSide: BorderSide.none,
+                  ),
+                ),
+              ),
+            ),
           ),
         ),
-      ),
-      body:
-      
-          usuarioViewModel.cargando
-              ? const Center(child: CircularProgressIndicator())
-              : usuarioViewModel.error != null
-              ? Center(child: Text('Error: ${usuarioViewModel.error}'))
-              : ListView.builder(
-                itemCount: usuarioViewModel.usuarios.length,
-                itemBuilder: (context, index) {
-                  final usuario = usuarioViewModel.usuarios[index];
+        body: usuarioViewModel.cargando
+            ? const Center(child: CircularProgressIndicator())
+            : usuarioViewModel.error != null
+                ? Center(child: Text('Error: ${usuarioViewModel.error}'))
+                : usuariosFiltrados.isEmpty
+                    ? const Center(
+                        child: Text(
+                          'No se encontraron usuarios.',
+                          style: TextStyle(color: Colors.teal),
+                        ),
+                      )
+                    : ListView.builder(
+                        itemCount: usuariosFiltrados.length,
+                        itemBuilder: (context, index) {
+                          final usuario = usuariosFiltrados[index];
 
-                  return Card(
-                    margin: const EdgeInsets.symmetric(
-                      horizontal: 12,
-                      vertical: 6,
-                    ),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    elevation: 4,
-                    child: ListTile(
-                      contentPadding: const EdgeInsets.symmetric(
-                        horizontal: 16,
-                        vertical: 8,
+                          return Card(
+                            margin: const EdgeInsets.symmetric(
+                              horizontal: 12,
+                              vertical: 6,
+                            ),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                            elevation: 4,
+                            child: ListTile(
+                              contentPadding: const EdgeInsets.symmetric(
+                                horizontal: 16,
+                                vertical: 8,
+                              ),
+                              title: Text(
+                                '${usuario.nombreUsuario} ${usuario.apellidoPaterno} ${usuario.apellidoMaterno}',
+                                style: const TextStyle(fontWeight: FontWeight.w500),
+                              ),
+                              subtitle: Text(
+                                usuario.nombreRol ?? 'Sin rol',
+                                style: const TextStyle(color: Colors.grey),
+                              ),
+                              trailing: Wrap(
+                                spacing: 8,
+                                children: [
+                                  IconButton(
+                                    icon: const Icon(Icons.edit, color: Colors.lightBlue),
+                                    onPressed: () {
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) => EditarUsuarioPage(usuario: usuario),
+                                        ),
+                                      );
+                                    },
+                                  ),
+                                  IconButton(
+                                    icon: const Icon(Icons.delete, color: Colors.redAccent),
+                                    onPressed: () {
+                                      mostrarDialogoEliminarUsuario(
+                                        context,
+                                        usuario.id,
+                                      );
+                                    },
+                                  ),
+                                ],
+                              ),
+                            ),
+                          );
+                        },
                       ),
-                      title: Text(
-                        '${usuario.nombreUsuario} ${usuario.apellidoPaterno} ${usuario.apellidoMaterno}',
-                        style: const TextStyle(fontWeight: FontWeight.w500),
-                      ),
-                      subtitle: Text(
-                        usuario.nombreRol ?? 'Sin rol',
-                        style: const TextStyle(color: Colors.grey),
-                      ),
-                      trailing: Wrap(
-                        spacing: 8,
-                        children: [
-                          IconButton(
-                            icon: const Icon(Icons.edit, color: Colors.lightBlue),
-                            onPressed: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder:
-                                      (context) =>
-                                          EditarUsuarioPage(usuario: usuario),
-                                ),
-                              );
-                            },
-                          ),
-                          IconButton(
-                            icon: const Icon(Icons.delete, color: Colors.redAccent),
-                            onPressed: () {
-                              mostrarDialogoEliminarUsuario(
-                                context,
-                                usuario.id,
-                              );
-                            },
-                          ),
-                        ],
-                      ),
-                    ),
-                  );
-                },
-              ),
+      ),
     );
   }
 }
