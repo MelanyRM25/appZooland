@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:zooland/services/vacuna_Service.dart';
+import 'package:zooland/services/vacuna_service.dart';
 import '../models/vacuna_model.dart';
 
 class VacunaViewModel extends ChangeNotifier {
@@ -18,17 +18,6 @@ class VacunaViewModel extends ChangeNotifier {
   // Lista completa de vacunas
   List<Vacuna> _vacunas = [];
   List<Vacuna> get vacunas => _vacunas;
-
-  // Listas filtradas
-  List<Vacuna> get vacunasAplicadas {
-    final ahora = DateTime.now();
-    return _vacunas.where((v) => v.fechaAplicacion.isBefore(ahora)).toList();
-  }
-
-  List<Vacuna> get vacunasProximas {
-    final ahora = DateTime.now();
-    return _vacunas.where((v) => v.fechaAplicacion.isAfter(ahora)).toList();
-  }
 
   // Setters del formulario
   void setNombreVacuna(String value) {
@@ -51,7 +40,7 @@ class VacunaViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  /// ✅ Obtener todas las vacunas por mascota
+  /// Obtener todas las vacunas por mascota
   Future<void> cargarVacunas(String idMascota) async {
     _isLoading = true;
     notifyListeners();
@@ -91,6 +80,13 @@ class VacunaViewModel extends ChangeNotifier {
     final success = await _service.registrarVacuna(vacuna);
 
     if (success) {
+      // 🔹 Crear recordatorios automáticos (1 día y 1 semana antes)
+      await _service.crearRecordatorios(
+        idMascota: idMascota,
+        tipo: 'vacuna',
+        fechaEvento: fechaProximaDosis!,
+      );
+
       await cargarVacunas(idMascota); // Recargar lista
     }
 

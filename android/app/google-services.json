@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "574248946603",
+    "project_id": "zoolandapp-7edb6",
+    "storage_bucket": "zoolandapp-7edb6.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:574248946603:android:86646d02aa9ded9c1fa0ee",
+        "android_client_info": {
+          "package_name": "com.example.zooland"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBjT-TnSANWCEKuInPTUTphA6OQFbVRw4k"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
